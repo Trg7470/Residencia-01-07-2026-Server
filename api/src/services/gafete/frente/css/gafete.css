@@ -1,0 +1,283 @@
+/*======================================================
+    GAFETE DE IDENTIFICACIÓN
+    Servicios de Salud de Durango
+======================================================*/
+
+/*======================================================
+    VARIABLES
+======================================================*/
+
+:root{
+
+    --ancho-gafete: 7cm;
+    --alto-gafete: 11cm;
+
+    --ancho-logo: 1.95cm;
+    --alto-logo: 1.30cm;
+
+    --ancho-foto: 2.30cm;
+    --alto-foto: 2.60cm;
+
+    --alto-banner: 2.30cm;
+
+    --fuente-titulo: 7px;
+    --fuente-datos: 7px;
+    --fuente-firma: 5px;
+
+    /* Color del fondo del gafete */
+    --color-fondo: #F6F6F6;
+
+}
+
+/*======================================================
+    PÁGINA
+======================================================*/
+
+body{
+
+    margin:0;
+
+    padding:30px;
+
+    display:flex;
+
+    justify-content:center;
+
+    background:#f2f2f2;
+
+    font-family:Arial, sans-serif;
+
+}
+
+/*======================================================
+    GAFETE
+======================================================*/
+
+.gafete{
+
+    width:var(--ancho-gafete);
+
+    height:var(--alto-gafete);
+
+    background:white;
+
+    border:1px solid black;
+
+    box-sizing:border-box;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:0 0 8px rgba(0,0,0,.2);
+
+    padding:0.25cm;
+
+}
+
+/*======================================================
+    ENCABEZADO
+======================================================*/
+
+.encabezado{
+
+    text-align:center;
+
+}
+
+.logo{
+
+    width:var(--ancho-logo);
+
+    height:var(--alto-logo);
+
+    margin:0 auto 3px auto;
+
+}
+
+.logo img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:fill;
+
+    display:block;
+
+}
+
+.institucion h2,
+.institucion p,
+.institucion h3{
+
+    margin:1px 0;
+
+    font-size:var(--fuente-titulo);
+
+    font-weight:bold;
+
+}
+
+/*======================================================
+    FOTO
+======================================================*/
+
+.foto-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:5px;
+
+    margin-bottom:7px;
+
+}
+
+.foto{
+
+    width:var(--ancho-foto);
+
+    height:var(--alto-foto);
+
+    overflow:hidden;
+
+}
+
+.foto img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:fill;
+
+    display:block;
+
+}
+
+/*======================================================
+    DATOS
+======================================================*/
+
+.datos{
+
+    width:5.6cm;
+
+    margin:0 auto;
+
+    text-align:left;
+
+    font-size:var(--fuente-datos);
+
+    line-height:1.2;
+
+}
+
+.dato{
+
+    margin:4px 0;
+
+}
+
+.titulo{
+
+    font-weight:bold;
+
+}
+
+/*======================================================
+    FIRMA
+======================================================*/
+
+.firma{
+
+    position:absolute;
+
+    left:0;
+
+    bottom:2.30cm;
+
+    width:100%;
+
+    text-align:center;
+
+    font-size:5px;
+
+}
+
+.tipo-personal{
+
+    font-weight:bold;
+
+    margin-bottom:1.20cm;
+
+}
+
+.espacioFirma{
+
+    height:1.5cm;
+
+}
+
+
+.linea{
+
+    width:4cm;
+
+    margin:auto;
+
+    border-top:2px solid #0B4EA2;
+
+    margin-bottom:2px;
+
+}
+
+
+.encargado{
+
+    margin-top:2px;
+
+    font-weight:bold;
+
+}
+
+
+.ocupacion{
+
+    font-weight:bold;
+
+}
+
+
+/*======================================================
+    BANNER
+======================================================*/
+
+.pie{
+
+    position:absolute;
+
+    left:0;
+
+    bottom:0;
+
+    width:100%;
+
+    height:var(--alto-banner);
+
+}
+
+
+.pie img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:fill;
+
+    display:block;
+
+}

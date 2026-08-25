@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "siees-502415",
+  "private_key_id": "678e99b730fbbdaf88488aa065c70a7f7715bbf4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDMNlEzqlpLLg2h\nDBiDPdmEGnbyzDzxCzstm+kFpy3XSY2DQx7FAamJVZYaYpNcmCYmxRW2diD55NlC\nh9Mjw/bhVekBqgvfTVT8oIoJh7cLkKV9SjiYgTEacPp+lRbog0NN28wVUwkVCtAJ\n+eE+TRMv5e1xokT6ZNyVa0KcSPznUsUv0T+EA97ClZW/6U6iIP/JUTT+UlYyxRWr\n6BhTQZmOowRikMTGsH8VnSKVMYlTfUE6ig51rb4iLVGyLurh87CvImLBjZSOPFHw\naC59aizFdWnaoTxLyfHkj2M0IxxKG6euNfhnWvoNnLi73nGX2XKfGa/r2iJSHgGv\ndddv+bXZAgMBAAECggEAKtnbADRm7g+j3H9lRWTdF9NV0mz4/LuWl2N36i/CdsKA\nZ2LWOhC3OpIzBSZaNbvXhZslizwOf2F+FW/a5k5gp7gXRLoh86GOi9REIuvPhSW9\nFCVW6ulxHFNIvPcb735bySKuGGtsJHY4YV+F3ETgGdTtlkKuprwzbUcsmw7VwtRD\nZK8YIFBEmTRFApNmZzpmYTnMO8h1p2TdXGAYp89xjQYbEdMH/m7fc5oCV5pJDGkx\nbfb46LAyYGYYkPXmGLpr0droRoa19lww0zT1j0xhIhcYm+7DGftRsrPzOV17wJt2\nAaHcxHXpBxoN8kPx4sbV+g0EdHSsaza9Smkn2sMVYQKBgQDxHzbMo15fdABIyVNm\n33jWlYtN3oXuFz46GApsSWOCtfcRu2KDdxpb9MS/7qseAH/30yvo6kN9sXQRH5Sn\nDavOaQ3Eul3qoUIUMoZzOJ7yQsRh1lzn22Tftja7iBzWs3jI44ANyKIgJiifcFPc\nMZJMnMgWQjz6/oksvPAhuUTshwKBgQDY0BKwiwIJVPiEYmYVIhoh1mUAMD3cHzP3\ns3wupX210Fac386cuQutbrSIcnbrRiPl8DijilocY8IrcWvRezb4iGAU/dKm2lJr\nUtjIJVW4Ow4O9a8gTUc3vyTeOmHp4wx7qabnrDlrTzIuNoIEhT2ac3HxzErIULFq\ncgetmVBCnwKBgFcrrrcKtNqTaGroBfPiBKCnTcZoFUk/M+ryuAnv+j7OJDVP5kya\n6XenJN4yncBp89mXiX9Z+e5eEhUCss42Hg+wYR7nNX7Wr7n3ji3noWb6Bl9MjSfx\nZCWQjXb8vVhNZ/RQcwIIr7wpr3P8uwSXE0oJQDjz13HyRYtb/wBiJ23PAoGANMos\n0sl13HnQ7MLcoiakgDqoauxUE4WRbK1J/j2TJzKr9BRWRTiVDExZLqPYKp7wXKsp\nzz//gswTWeqK2v2KO+dQpavLn46m5LTOTaUxguL2IFRXqKDIR12GB4nlj0IWJwH+\nvofjjypASJpC/ADJKBMV2k7oom9rU0Sic/VRYncCgYAe9CVWvsgwsh9qpHCwUXTF\nXP1MwivDPI5l//41rcvnr0/xHhmbJMXe5l36F4gXSVhLeHoEA0zRG57QZRHR7QOA\nt0x+fTF6cEx3LA0ctwOqOarADAgugGQuIy6lViV1hwLA/j37semmV7e+wCdPpWcB\nMntHZmI91+20Njgsxwv2rw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "siees-drive-service@siees-502415.iam.gserviceaccount.com",
+  "client_id": "108207363167379502853",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/siees-drive-service%40siees-502415.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

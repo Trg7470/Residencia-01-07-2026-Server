@@ -1,0 +1,95 @@
+body{
+
+    margin:0;
+    padding:20px;
+
+    background:#eee;
+
+    font-family: Arial, sans-serif;
+
+}
+
+.acciones{
+
+    text-align:center;
+
+    margin-bottom:60px;
+
+}
+
+
+button{
+
+    font-family: Arial, sans-serif;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    color:white;
+
+    background:#0B4EA2;
+
+    border:none;
+
+    border-radius:5px;
+
+    padding:6px 18px;
+
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background:#083B7A;
+
+}
+
+.hoja{
+
+    width:14cm;
+
+    height:11cm;
+
+    display:flex;
+
+    flex-direction:row;
+
+}
+
+
+
+.lado{
+
+    width:7cm;
+
+    height:11cm;
+
+    overflow:hidden;
+
+}
+
+
+
+@media print {
+
+
+    body{
+
+        padding:0;
+        margin:0;
+
+        background:white;
+
+    }
+
+
+    .acciones{
+
+        display:none;
+
+    }
+
+
+}

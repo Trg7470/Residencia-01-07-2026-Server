@@ -1,0 +1,202 @@
+/*======================================================
+    REVERSO DEL GAFETE
+======================================================*/
+
+:root{
+
+    --ancho-gafete:7cm;
+    --alto-gafete:11cm;
+
+    --alto-banner:2.30cm;
+
+    --color-fondo:white;
+
+    --color-azul:#0B4EA2;
+
+}
+
+body{
+
+    margin:0;
+
+    padding:30px;
+
+    display:flex;
+
+    justify-content:center;
+
+    background:#f2f2f2;
+
+    font-family:Arial, sans-serif;
+
+}
+
+.gafete{
+
+    width:var(--ancho-gafete);
+
+    height:var(--alto-gafete);
+
+    background:var(--color-fondo);
+
+    border:1px solid black;
+
+    position:relative;
+
+    overflow:hidden;
+
+    padding:.25cm;
+
+    box-sizing:border-box;
+
+}
+
+/*======================
+    TÍTULO
+======================*/
+
+.titulo{
+
+    text-align:center;
+
+    margin-top:.30cm;
+
+}
+
+.titulo h2{
+
+    margin:1px 0;
+
+    font-size:7px;
+
+    font-weight:bold;
+
+}
+
+/*======================
+    CUADRO GRIS
+======================*/
+
+.mensaje{
+
+    width:6.5cm;
+
+    height:1.15cm;
+
+    background:#E6E6E6;
+
+    border-radius:8px;
+
+    border:1px solid #BFBFBF;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-top:.55cm;
+
+}
+
+.mensaje p{
+
+    margin:0;
+
+    font-size:7px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+}
+
+/*======================
+    QR
+======================*/
+
+.qr{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:.45cm;
+
+}
+
+.qr img{
+
+    width:4cm;
+
+    height:4cm;
+
+}
+
+/*======================
+    FIRMA
+======================*/
+
+.firma{
+
+    position:absolute;
+
+    width:100%;
+
+    left:0;
+
+    bottom:calc(var(--alto-banner) + .20cm);
+
+    text-align:center;
+
+}
+
+.linea{
+
+    width:4cm;
+
+    margin:auto;
+
+    border-top:2px solid #0B4EA2;
+
+}
+
+.textoFirma{
+
+    margin-top:2px;
+
+    font-size:5px;
+
+    font-weight:bold;
+
+}
+
+/*======================
+    BANNER
+======================*/
+
+.pie{
+
+    position:absolute;
+
+    left:0;
+
+    bottom:0;
+
+    width:100%;
+
+    height:var(--alto-banner);
+
+}
+
+.pie img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:fill;
+
+}

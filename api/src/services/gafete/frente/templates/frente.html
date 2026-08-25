@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Gafete</title>
+
+    {{ESTILOS}}
+
+</head>
+
+<body>
+
+    <div class="gafete">
+
+        <!-- ====================================== -->
+        <!-- ENCABEZADO -->
+        <!-- ====================================== -->
+
+        <div class="encabezado">
+
+            <div class="logo">
+
+                <img
+                    src="{{Logo}}"
+                    alt="Logo Servicios de Salud">
+
+            </div>
+
+            <div class="institucion">
+
+                <h2>
+                    SERVICIOS DE SALUD DE DURANGO
+                </h2>
+
+                <p>
+                    JURISDICCIÓN SANITARIA NO. 2
+                </p>
+
+                <h3>
+                    GAFETE DE IDENTIFICACIÓN OFICIAL
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- FOTO -->
+        <!-- ====================================== -->
+
+        <div class="foto-container">
+
+            <div class="foto">
+
+                <img
+                    src="{{Foto}}"
+                    alt="Fotografía del pasante">
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- DATOS -->
+        <!-- ====================================== -->
+
+        <div class="datos">
+
+            <p class="dato">
+
+                <span class="titulo">
+
+                    NOMBRE:
+
+                </span>
+
+                {{Nombre}}
+
+            </p>
+
+
+            <p class="dato">
+
+                <span class="titulo">
+
+                    ADSCRIPCIÓN:
+
+                </span>
+
+                {{Adscripcion}}
+
+            </p>
+
+
+            <p class="dato">
+
+                <span class="titulo">
+
+                    ESC. DE PROCEDENCIA:
+
+                </span>
+
+                {{Escuela}}
+
+            </p>
+
+
+            <p class="dato">
+
+                <span class="titulo">
+
+                    VIGENCIA:
+
+                </span>
+
+                {{Vigencia}}
+
+            </p>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- FIRMA -->
+        <!-- ====================================== -->
+
+        <div class="firma">
+
+            <div class="tipo-personal">
+
+                PASANTE DE {{Carrera}}
+
+            </div>
+
+
+            <div class="linea"></div>
+
+
+            <div class="encargado">
+
+                {{Encargado}}
+
+            </div>
+
+
+            <div class="ocupacion">
+
+                {{Ocupacion}}
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- BANNER -->
+        <!-- ====================================== -->
+
+        <div class="pie">
+
+            <img
+                src="{{Banner}}"
+                alt="Banner inferior">
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
