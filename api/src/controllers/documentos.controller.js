@@ -82,6 +82,16 @@ class DocumentosController {
             return res.status(500).json({ error: 'Error interno del servidor.' });
         }
     }
+
+    static async contar(req, res) {
+        try {
+            const total = await Documentos.contar();
+            return res.status(200).json({ total });
+        } catch (error) {
+            console.error('Error al contar documentos:', error);
+            return res.status(500).json({ error: 'Error interno del servidor.' });
+        }
+    }
 }
 
 module.exports = DocumentosController;

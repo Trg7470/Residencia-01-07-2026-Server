@@ -6,6 +6,7 @@ const DocumentosController = require('../controllers/documentos.controller');
 router.post('/registrar', DocumentosController.registrar);
 
 // Consultas y operaciones adicionales
+router.get('/count', DocumentosController.contar);
 router.get('/:id', DocumentosController.obtenerPorId);
 router.get('/carpeta/:idCarpeta', DocumentosController.obtenerPorCarpeta);
 router.delete('/:id', DocumentosController.eliminar);

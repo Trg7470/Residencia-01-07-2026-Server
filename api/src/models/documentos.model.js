@@ -54,6 +54,12 @@ class Documentos {
         const [resultado] = await mysqlPool.query(query, [id]);
         return resultado;
     }
+
+    static async contar()
+    {
+        const [rows] = await mysqlPool.query('SELECT COUNT(*) AS Total FROM Documentos');
+        return rows[0].Total;
+    }
 }
 
 module.exports = Documentos;

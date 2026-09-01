@@ -11,6 +11,12 @@ class CarpetasDrive
         );
         return result.insertId;
     }
+
+    static async contar()
+    {
+        const [rows] = await mysqlPool.query(`SELECT COUNT(*) AS Total FROM Carpetas_Drive`);
+        return rows[0].Total;
+    }
 }
 
 module.exports = CarpetasDrive;

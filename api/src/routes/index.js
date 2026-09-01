@@ -14,6 +14,7 @@ const TiposPersonalRoutes = require('./tipos_personal.routes');
 const AdscripcionesRoutes = require('./adscripciones.routes');
 const ContactosEmergenciaRoutes = require('./contactos_emergencia.routes');
 const DocumentosRoutes = require('./documentos.routes');
+const ExpedientesRoutes = require('./expedientes.routes');
 
 //Documentos
 const FichaIdentificacionRoutes = require("./documentos/ficha_identificacion.routes");
@@ -38,6 +39,7 @@ router.use('/auth', AuthRoutes);
 router.use('/unidades', UnidadesRoutes);
 router.use('/personal', TiposPersonalRoutes);
 router.use('/adscripciones', AdscripcionesRoutes);
+router.use('/expedientes', ExpedientesRoutes);
 
 // Rutas documentos
 router.use('/documentos/',DocumentosRoutes);

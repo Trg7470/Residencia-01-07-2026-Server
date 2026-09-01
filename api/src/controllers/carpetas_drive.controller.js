@@ -12,6 +12,17 @@ class CarpetasDriveController {
             res.status(500).json({ error: 'Error al crear la carpeta' });
         }
     }
+
+    static async contar(req, res) {
+        try {
+            const total = await CarpetasDrive.contar();
+            res.status(200).json({ total });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al contar las carpetas' });
+        }
+    }
 }
 
 module.exports = CarpetasDriveController;
