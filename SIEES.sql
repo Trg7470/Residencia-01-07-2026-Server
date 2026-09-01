@@ -589,3 +589,44 @@ INNER JOIN Carreras c
     ON c.Id_Carrera = de.Id_Carrera_D_Escolar
 INNER JOIN Escuelas e
     ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
+    
+CREATE OR REPLACE VIEW vw_informacion_general_expediente AS
+SELECT
+    cd.Id_Carpeta,
+    cd.Drive_Folder_Id,
+    cd.Nombre_Carpeta,
+    dp.Id_Persona,
+    CONCAT(
+        dp.Nombre, ' ',
+        dp.Apellido_Paterno, ' ',
+        dp.Apellido_Materno
+    ) AS Nombre_Completo,
+    dp.CURP,
+    dp.Telefono,
+    dp.Correo,
+    dp.Fecha_Nac,
+    u.Nombre AS Adscripcion,
+    uc.Nombre AS Comision,
+    c.Nombre AS Carrera,
+    e.Nombre AS Escuela,
+    a.Fecha_Inicio,
+    a.Fecha_Termino
+FROM Carpetas_Drive cd
+INNER JOIN Adscripciones a
+    ON a.Id_Adscripcion = cd.Id_Adscripcion
+    AND a.Tipo_Adscripcion = 'Principal'
+INNER JOIN Datos_Personales dp
+    ON dp.Id_Persona = a.Id_Persona_Adscripcion
+INNER JOIN Unidades u
+    ON u.Id_Unidad = a.Id_Unidad_Adscripcion
+LEFT JOIN Adscripciones ac
+    ON ac.Id_Persona_Adscripcion = dp.Id_Persona
+    AND ac.Tipo_Adscripcion = 'Comision'
+LEFT JOIN Unidades uc
+    ON uc.Id_Unidad = ac.Id_Unidad_Adscripcion
+INNER JOIN Datos_Escolares de
+    ON de.Id_Persona_D_Escolar = dp.Id_Persona
+INNER JOIN Carreras c
+    ON c.Id_Carrera = de.Id_Carrera_D_Escolar
+INNER JOIN Escuelas e
+    ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
