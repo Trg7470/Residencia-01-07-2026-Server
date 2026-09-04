@@ -589,7 +589,9 @@ INNER JOIN Carreras c
     ON c.Id_Carrera = de.Id_Carrera_D_Escolar
 INNER JOIN Escuelas e
     ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
-    
+
+USE SIEES;
+
 CREATE OR REPLACE VIEW vw_informacion_general_expediente AS
 SELECT
     cd.Id_Carpeta,
@@ -601,11 +603,15 @@ SELECT
         dp.Apellido_Paterno, ' ',
         dp.Apellido_Materno
     ) AS Nombre_Completo,
+    dp.Nombre,
+    dp.Apellido_Paterno,
+    dp.Apellido_Materno,
     dp.CURP,
     dp.Telefono,
     dp.Correo,
     dp.Fecha_Nac,
     u.Nombre AS Adscripcion,
+    tp.Nombre AS Tipo_Personal,
     uc.Nombre AS Comision,
     c.Nombre AS Carrera,
     e.Nombre AS Escuela,
@@ -615,6 +621,8 @@ FROM Carpetas_Drive cd
 INNER JOIN Adscripciones a
     ON a.Id_Adscripcion = cd.Id_Adscripcion
     AND a.Tipo_Adscripcion = 'Principal'
+INNER JOIN Tipos_Personal tp
+    ON tp.Id_Tipo_Personal = a.Id_Tipo_Personal_Ad
 INNER JOIN Datos_Personales dp
     ON dp.Id_Persona = a.Id_Persona_Adscripcion
 INNER JOIN Unidades u
@@ -630,3 +638,9 @@ INNER JOIN Carreras c
     ON c.Id_Carrera = de.Id_Carrera_D_Escolar
 INNER JOIN Escuelas e
     ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
+    
+ALTER TABLE Documentos
+ADD COLUMN Tipo VARCHAR(100) NOT NULL;
+
+CREATE OR REPLACE VIEW vw_documentos_expediente AS
+SELECT Id_Documento, Nombre, Drive_File_Id, Mime_Type, Id_Carpeta_Documento, Tipo WHERE Id_
