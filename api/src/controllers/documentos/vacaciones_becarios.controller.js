@@ -1,10 +1,18 @@
 const path = require("path");
-const { GenerarVacacionesBecarios } = require("../../services/documentos/vacaciones_becarios.service");
 
-async function GenerarVacacionesBecariosController(req, res) {
+const{
+    GenerarVacacionesBecarios
+} = require("../../services/documentos/vacaciones_becarios.service");
 
-    try {
-        const documentos = await GenerarVacacionesBecarios();
+async function GenerarVacacionesBecariosController(req, res){
+    try{
+        // Recibir datos enviados desde el formulario web
+        const datos = req.body;
+
+        console.log("Datos recibidos:", datos);
+
+        // Generar documentos usando los datos del formulario
+        const documentos = await GenerarVacacionesBecarios(datos);
 
         res.status(200).json({
             mensaje: "Formato de vacaciones para becarios generado correctamente.",
@@ -12,7 +20,7 @@ async function GenerarVacacionesBecariosController(req, res) {
             documentoPDF: path.basename(documentos.pdf)
         });
 
-    } catch (error) {
+    } catch(error){
         console.error(error);
         res.status(500).json({
             mensaje: "Error al generar el formato de vacaciones de becarios."
@@ -20,4 +28,6 @@ async function GenerarVacacionesBecariosController(req, res) {
     }
 }
 
-module.exports = {GenerarVacacionesBecariosController};
+module.exports = {
+    GenerarVacacionesBecariosController
+};
