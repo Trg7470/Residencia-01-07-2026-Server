@@ -406,23 +406,3 @@ INNER JOIN Escuelas e
 ALTER TABLE Documentos
 ADD COLUMN Tipo VARCHAR(100) NOT NULL;
 
--- TABLA: VACACIONES_BECARIOS --
-CREATE TABLE vacaciones_becarios (
-    Id_Vacaciones INT NOT NULL AUTO_INCREMENT,
-    Id_Persona_Vacaciones INT NOT NULL,
-    Fecha_Solicitud DATE NOT NULL DEFAULT (CURRENT_DATE),
-    Fecha_Inicio DATE NOT NULL,
-    Fecha_Termino DATE NOT NULL,
-    Dias_Vacaciones INT NOT NULL,
-    Observaciones VARCHAR(255) DEFAULT NULL,
-    Estado ENUM('Pendiente', 'Autorizada', 'Rechazada') 
-        NOT NULL DEFAULT 'Pendiente',
-    Fecha_Autorizacion DATE DEFAULT NULL,
-    PRIMARY KEY (Id_Vacaciones),
-    KEY FK_Id_Persona_Vacaciones (Id_Persona_Vacaciones),
-    CONSTRAINT FK_Id_Persona_Vacaciones
-        FOREIGN KEY (Id_Persona_Vacaciones)
-        REFERENCES datos_personales (Id_Persona)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
-);
