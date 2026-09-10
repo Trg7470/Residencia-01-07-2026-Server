@@ -406,3 +406,31 @@ INNER JOIN Escuelas e
 ALTER TABLE Documentos
 ADD COLUMN Tipo VARCHAR(100) NOT NULL;
 
+-- =====================================================
+-- TABLA: incidencias_becarios
+-- =====================================================
+DROP TABLE IF EXISTS `incidencias_becarios`;
+
+CREATE TABLE `incidencias_becarios` (
+    `Id_Incidencia` INT NOT NULL AUTO_INCREMENT,
+    `Fecha_Actual` DATE NOT NULL,
+    `Fecha_Solicitada` DATE NOT NULL,
+    `Promocion` VARCHAR(50) NOT NULL,
+    `Motivo` TEXT NOT NULL,
+    `Id_Persona_Incidencia` INT NOT NULL,
+
+    PRIMARY KEY (`Id_Incidencia`),
+
+    KEY `IDX_Id_Persona_Incidencia`
+        (`Id_Persona_Incidencia`),
+
+    CONSTRAINT `FK_Id_Persona_Incidencia`
+        FOREIGN KEY (`Id_Persona_Incidencia`)
+        REFERENCES `datos_personales` (`Id_Persona`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+

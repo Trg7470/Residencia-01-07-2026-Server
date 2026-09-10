@@ -1,65 +1,67 @@
 const { ObtenerPlantilla } = require("./encontrarPlantilla.service");
 const { GenerarDocumento } = require("./generarDocumento.service");
 const { GenerarPDF } = require("./generarPDF.service");
-
-// Servicio de Google Drive
+const {ObtenerIdPersonaPorCarpeta,CrearIncidenciaBecario} = require("../../models/incidencias_becarios.model.js");
 const { subir_archivo } = require("../drive.service");
-
 async function GenerarIncidenciasBecarios(data) {
-
     try {
         console.log("GENERANDO INCIDENCIA PARA BECARIO");
-        console.log("Datos recibidos:",data);
-        // VALIDAR CARPETA DE GOOGLE DRIVE
-        if (!data.Drive_Folder_Id) {
-            throw new Error("No se recibió el Drive_Folder_Id del expediente.");
-        }
-        // OBTENER PLANTILLA
-        const plantilla = ObtenerPlantilla("Formato_Incidencias_Becarios");
-        console.log("Plantilla encontrada:",plantilla);
-        // OBTENER APELLIDOS PARA EL NOMBRE DEL ARCHIVO
+        console.log("Datos recibidos:", data);
+        // 1. OBTENER ID DE PERSONA
+        const Id_Persona_Incidencia =await ObtenerIdPersonaPorCarpeta(data.Id_Carpeta);
+        console.log("Id_Persona encontrado:",Id_Persona_Incidencia);
+        // 2. GUARDAR INCIDENCIA EN MYSQL
+        const incidencia =
+            await CrearIncidenciaBecario({
+                Fecha_Actual:data.Fecha_Actual,
+                Fecha_Solicitada:data.Fecha_Solicitada,
+                Promocion:data.Promocion,
+                Motivo:data.Motivo,
+                Id_Persona_Incidencia:Id_Persona_Incidencia
+            });
+        console.log("Incidencia guardada en MySQL:",incidencia.Id_Incidencia);
+        // 3. OBTENER PLANTILLA
+        const plantilla =ObtenerPlantilla("Formato_Incidencias_Becarios");
+        // 4. CREAR NOMBRE DEL ARCHIVO
         const nombreCompleto =(data.Nombre_Becario || "").trim();
         const partesNombre =nombreCompleto.split(/\s+/);
         let apellidoPat = "";
         let apellidoMat = "";
-
         if (partesNombre.length >= 2) {
-            apellidoMat =partesNombre[partesNombre.length - 1];
-            apellidoPat =partesNombre[partesNombre.length - 2];
+            apellidoMat =partesNombre[partesNombre.length - 2];
+            apellidoPat =partesNombre[partesNombre.length - 1];
         }
-        // FECHA PARA EL NOMBRE DEL ARCHIVO
-        const fecha =new Date();
+        const fecha = new Date();
         const anio =fecha.getFullYear();
         const mes =String(fecha.getMonth() + 1).padStart(2, "0");
         const dia =String(fecha.getDate()).padStart(2, "0");
-        // NOMBRE DEL DOCUMENTO
         const nombreArchivo =`Incidencias_Becarios_${apellidoPat}_${apellidoMat}_${anio}-${mes}-${dia}`;
-        console.log("Nombre del archivo:",nombreArchivo);
-        // GENERAR WORD
+        // 5. GENERAR WORD
         const rutaDocumento =await GenerarDocumento(plantilla,data,nombreArchivo);
         console.log("Word generado:",rutaDocumento);
-        // GENERAR PDF
+        // 6. GENERAR PDF
         const rutaPDF =await GenerarPDF(rutaDocumento,nombreArchivo);
         console.log("PDF generado:",rutaPDF);
-        // CARPETA DE GOOGLE DRIVE
-        const carpetaDrive =data.Drive_Folder_Id;
-        console.log("Carpeta Drive del expediente:",carpetaDrive);
-        // SUBIR WORD A GOOGLE DRIVE
-        console.log("Cargando documento Word a Google Drive...");
-        const archivoWordDrive =await subir_archivo(`${nombreArchivo}.docx`,rutaDocumento,carpetaDrive);
-        console.log("Documento cargado correctamente:",archivoWordDrive);
-        // SUBIR PDF A GOOGLE DRIVE
-        console.log("Cargando documento PDF a Google Drive...");
-        const archivoPDFDrive =await subir_archivo(`${nombreArchivo}.pdf`,rutaPDF,carpetaDrive);
-        console.log("PDF cargado correctamente:",archivoPDFDrive);
-        // RESULTADO
+        // 7. VALIDAR CARPETA DRIVE
+        if (!data.Drive_Folder_Id) {
+            throw new Error(
+                "No se recibió el Drive_Folder_Id del expediente."
+            );
+        }
+        // 8. SUBIR ÚNICAMENTE EL PDF
+        const archivoPDFDrive =
+            await subir_archivo(
+                `${nombreArchivo}.pdf`,
+                rutaPDF,
+                data.Drive_Folder_Id
+            );
+        console.log("PDF subido correctamente a Google Drive.");
+        // 9. DEVOLVER RESULTADO
         return {
-            // Rutas locales
+            Id_Incidencia:incidencia.Id_Incidencia,
             docx:rutaDocumento,
             pdf:rutaPDF,
-            // Información de Drive
-            driveFolderId:carpetaDrive,
-            driveWord:archivoWordDrive,
+            driveFolderId:data.Drive_Folder_Id,
             drivePDF:archivoPDFDrive
         };
     } catch (error) {
@@ -68,6 +70,4 @@ async function GenerarIncidenciasBecarios(data) {
         throw error;
     }
 }
-module.exports = {
-    GenerarIncidenciasBecarios
-};
+module.exports = {GenerarIncidenciasBecarios};
