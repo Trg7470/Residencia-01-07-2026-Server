@@ -1,18 +1,69 @@
+const Expedientes = require("../../../models/expedientes.model");
 
-function ObtenerDatosConstanciaSS(){
+function FormatearFecha(fecha){
+    if(!fecha) return "";
+    const fechaObj = new Date(fecha);
+    return fechaObj.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+async function ObtenerDatosConstanciaSS(datosFormulario) {
+    // Obtener datos del expediente
+    const expediente = await Expedientes.obtener_general(
+        datosFormulario.Id_Carpeta
+    );
+
+    // Verificar que exista el expediente
+    if (!expediente) {
+        throw new Error("No se encontró información del expediente.");
+    }
+
+    // Obtener informacion de la unidad
+    const unidad = await Expedientes.obtener_unidad_por_nombre(
+        expediente.Adscripcion
+    );
+
+    // Verificar que exista la unidad
+    if(!unidad){
+        throw new Error(
+            "No se encontró información de la unidad correspondiente a la adscripción."
+        );
+    }
+
+    // Obtener fecha actual
+    const fechaActual = new Date().toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+
     return {
-        Fecha_Actual: "22 de junio de 2026",
-        Alumno: "M.P.S.S GRECIA ALESSANDRA GALARZA RODRIGUEZ",
-        Universidad: "Facultad de Ciencias de la Salud de la Universidad Juárez del Estado de Durango",
-        Fecha_Inicio: "01 de agosto de 2025",
-        Fecha_Termino: "31 de julio de 2026",
-        Unidad: "C.S.U 15 DE DICIEMBRE",
-        Municipio: "Gómez Palacio",
+        // Datos existentes del expediente
+        Alumno: expediente.Nombre_Completo,
+        Apellido_Paterno: expediente.Apellido_Paterno,
+        Apellido_Materno: expediente.Apellido_Materno,
+        Drive_Folder_Id: expediente.Drive_Folder_Id,
+        
+        Abreviatura_Alumno: datosFormulario.Abreviatura_Alumno,
+        Universidad: expediente.Escuela,
+        Fecha_Inicio: FormatearFecha(expediente.Fecha_Inicio),
+        Fecha_Termino: FormatearFecha(expediente.Fecha_Termino),
+        Unidad: unidad.Nombre,
+        Municipio: unidad.Municipio,
         Estado: "Dgo",
-        Conteo: "11",
-        Encargado: "EUSTAQUIO ISRAEL GRADO MOLINA",
-        Ocupacion: "JEFE DE ENSEÑANZA Y CAPACITACIÓN JURISDICCIONAL"
+
+        // Fecha de la constancia
+        Fecha_Actual: fechaActual,
+
+        // Datos capturados manualmente
+        Conteo: datosFormulario.Conteo.trim(),
+        Encargado: datosFormulario.Encargado,
+        Abreviatura_Encargado: datosFormulario.Abreviatura_Encargado,
+        Ocupacion: datosFormulario.Ocupacion
     };
 }
 
-module.exports = {ObtenerDatosConstanciaSS};
+module.exports = { ObtenerDatosConstanciaSS };
