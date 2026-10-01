@@ -434,3 +434,47 @@ CREATE TABLE `incidencias_becarios` (
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_0900_ai_ci;
 
+
+CREATE TABLE cartas_presentacion (
+    Id_Carta INT AUTO_INCREMENT PRIMARY KEY,
+    Id_Documento INT NOT NULL,
+    Id_Adscripcion INT NOT NULL,
+    Fecha_Carta DATE NOT NULL,
+    Abreviatura_Destinatario VARCHAR(20),
+    Dirigido_A VARCHAR(150),
+    Ocupacion_Destinatario VARCHAR(150),
+    Abreviatura_Alumno VARCHAR(20),
+    Ocupacion_Encargado VARCHAR(150),
+    Abreviatura_Encargado VARCHAR(20),
+    Encargado VARCHAR(150),
+    Fecha_Registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_carta_documento FOREIGN KEY (Id_Documento) REFERENCES documentos(Id_Documento)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_carta_adscripcion FOREIGN KEY (Id_Adscripcion) REFERENCES adscripciones(Id_Adscripcion)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+
+SHOW CREATE TABLE cartas_presentacion;
+
+
+ALTER TABLE documentos
+ADD COLUMN Id_Adscripcion_Documento INT NULL;
+
+ALTER TABLE documentos
+ADD CONSTRAINT FK_Documentos_Adscripcion
+FOREIGN KEY (Id_Adscripcion_Documento)
+REFERENCES adscripciones(Id_Adscripcion)
+ON DELETE RESTRICT
+ON UPDATE CASCADE;
+
+
+
+
+
+
+
