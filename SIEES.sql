@@ -9,7 +9,6 @@ CREATE DATABASE `SIEES` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 USE `SIEES`;
 
-
 -- Tabla: carpetas_drive
 
 CREATE TABLE `carpetas_drive` (
@@ -296,25 +295,23 @@ INSERT INTO `unidades` VALUES (1,1,'GÓMEZ PALACIO','DGSSA000710','RUBÉN JARAMI
 
 -- Datos de: adscripciones
 
-INSERT INTO `adscripciones` VALUES (34,'2026-06-01','2026-11-01',48,8,1,'Principal'),(36,'2026-06-01','2026-11-01',50,8,1,'Principal'),(73,'2026-07-01','2026-12-01',89,8,1,'Principal');
+INSERT INTO `adscripciones` VALUES (34,'2026-06-01','2026-11-01',89,8,1,'Principal');
 
 
 
 -- Datos de: beneficiarios
 
-INSERT INTO `beneficiarios` VALUES (34,'Araceli Flores',49,'Madre',47),(35,'Araceli Flores',49,'Madre',48),(37,'Araceli Flores',49,'Madre',50),(76,'Araceli Flores',49,'Madre',89);
+INSERT INTO `beneficiarios` VALUES (34,'Araceli Flores',49,'Madre',89);
 
 
 
 -- Datos de: contactos_emergencia
 
-INSERT INTO `contactos_emergencia` VALUES (22,'Araceli Flores','Madre','8714296971',47),(23,'Araceli Flores','Madre','8714296971',48),(25,'Araceli Flores','Madre','8714296971',50),(53,'Araceli Flores','Madre','8714296971',89);
+INSERT INTO `contactos_emergencia` VALUES (22,'Araceli Flores','Madre','8714296971',89);
 
 -- Datos de: datos_escolares
 
-INSERT INTO `datos_escolares` VALUES (22,9.50,1,'53220450695',8,47,4),(23,9.50,1,'53220450695',122,48,4),(25,9.50,1,'53220450695',122,50,4),(53,9.50,1,'53220450695',122,89,4);
-
-
+INSERT INTO `datos_escolares` VALUES (22,9.50,1,'53220450695',8,89,4);
 
 -- Datos de: usuarios
 
@@ -458,8 +455,6 @@ CREATE TABLE cartas_presentacion (
         ON UPDATE CASCADE
 );
 
-
-SHOW CREATE TABLE cartas_presentacion;
 
 
 ALTER TABLE documentos
