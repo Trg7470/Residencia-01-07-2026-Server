@@ -2,10 +2,7 @@
 
 -- MySQL 8.x / 9.x
 
-
-DROP DATABASE IF EXISTS `SIEES`;
-
-CREATE DATABASE `SIEES` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS `SIEES` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 USE `SIEES`;
 
@@ -167,7 +164,7 @@ CREATE TABLE `contactos_emergencia` (
 -- Tabla: datos_escolares
 
 CREATE TABLE `datos_escolares` (
-  `Id_Dato_Escoalr` int NOT NULL AUTO_INCREMENT,
+  `Id_Dato_Escolar` int NOT NULL AUTO_INCREMENT,
   `Promedio` decimal(4,2) NOT NULL,
   `Cuenta_NSS` tinyint(1) NOT NULL DEFAULT '0',
   `Numero_Afiliacion` varchar(20) DEFAULT NULL,
@@ -210,11 +207,8 @@ CREATE TABLE `bitacora` (
   `Tabla_Afectada` varchar(50) NOT NULL,
   `Fecha_Hora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Id_Usuario_Bitacora` int NOT NULL,
-  `Id_Persona_Bitacora` int NOT NULL,
   PRIMARY KEY (`Id_Bitacora`),
   KEY `FK_Id_Usuario_Bitacora` (`Id_Usuario_Bitacora`),
-  KEY `FK_Id_Persona_Bitacora` (`Id_Persona_Bitacora`),
-  CONSTRAINT `FK_Id_Persona_Bitacora` FOREIGN KEY (`Id_Persona_Bitacora`) REFERENCES `datos_personales` (`Id_Persona`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Id_Usuario_Bitacora` FOREIGN KEY (`Id_Usuario_Bitacora`) REFERENCES `usuarios` (`Id_Usuario`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
