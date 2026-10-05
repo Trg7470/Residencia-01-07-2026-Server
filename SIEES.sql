@@ -200,17 +200,29 @@ CREATE TABLE `usuarios` (
 
 
 -- Tabla: bitacora
-
 CREATE TABLE `bitacora` (
-  `Id_Bitacora` int NOT NULL AUTO_INCREMENT,
-  `Accion` varchar(100) NOT NULL,
-  `Tabla_Afectada` varchar(50) NOT NULL,
-  `Fecha_Hora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `Id_Usuario_Bitacora` int NOT NULL,
-  PRIMARY KEY (`Id_Bitacora`),
-  KEY `FK_Id_Usuario_Bitacora` (`Id_Usuario_Bitacora`),
-  CONSTRAINT `FK_Id_Usuario_Bitacora` FOREIGN KEY (`Id_Usuario_Bitacora`) REFERENCES `usuarios` (`Id_Usuario`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    `Id_Bitacora` INT NOT NULL AUTO_INCREMENT,
+    `Accion` VARCHAR(100) NOT NULL,
+    `Tabla_Afectada` VARCHAR(100) NOT NULL,
+    `Id_Registro_Afectado` INT NULL,
+    `Descripcion` VARCHAR(500) NULL,
+    `Datos_Anteriores` JSON NULL,
+    `Datos_Nuevos` JSON NULL,
+    `Fecha_Hora` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `Id_Usuario_Bitacora` INT NOT NULL,
+    PRIMARY KEY (`Id_Bitacora`),
+    KEY `IDX_Bitacora_Usuario` (`Id_Usuario_Bitacora`),
+    KEY `IDX_Bitacora_Fecha` (`Fecha_Hora`),
+    KEY `IDX_Bitacora_Tabla` (`Tabla_Afectada`),
+    KEY `IDX_Bitacora_Registro` (`Id_Registro_Afectado`),
+    CONSTRAINT `FK_Id_Usuario_Bitacora`
+        FOREIGN KEY (`Id_Usuario_Bitacora`)
+        REFERENCES `usuarios` (`Id_Usuario`)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Tabla: documentos
