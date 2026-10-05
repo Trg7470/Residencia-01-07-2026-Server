@@ -200,6 +200,7 @@ CREATE TABLE `usuarios` (
 
 
 -- Tabla: bitacora
+DROP TABLE IF EXISTS `bitacora`;
 CREATE TABLE `bitacora` (
     `Id_Bitacora` INT NOT NULL AUTO_INCREMENT,
     `Accion` VARCHAR(100) NOT NULL,
@@ -214,6 +215,7 @@ CREATE TABLE `bitacora` (
     KEY `IDX_Bitacora_Usuario` (`Id_Usuario_Bitacora`),
     KEY `IDX_Bitacora_Fecha` (`Fecha_Hora`),
     KEY `IDX_Bitacora_Tabla` (`Tabla_Afectada`),
+    KEY `IDX_Bitacora_Accion` (`Accion`),
     KEY `IDX_Bitacora_Registro` (`Id_Registro_Afectado`),
     CONSTRAINT `FK_Id_Usuario_Bitacora`
         FOREIGN KEY (`Id_Usuario_Bitacora`)
