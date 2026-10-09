@@ -2,7 +2,7 @@ const { ObtenerPlantilla } = require("./encontrarPlantilla.service");
 const { ObtenerDatosConstanciaSS } = require("./datos/carta_constancia_ss.datos");
 const { GenerarDocumento } = require("./generarDocumento.service");
 const { GenerarPDF } = require("./generarPDF.service");
-const { subir_archivo, listar_archivos_carpeta, actualizar_archivo } = require("../../services/drive.service");
+const { subir_archivo, listar_archivos_carpeta, actualizar_archivo, obtener_archivo } = require("../../services/drive.service");
 
 async function GenerarCartaConstanciaSS(datosFormulario) {
     // Obtener plantilla
@@ -44,6 +44,8 @@ async function GenerarCartaConstanciaSS(datosFormulario) {
         archivo => archivo.name === nombrePDF
     );
 
+    let resultadoDrive;
+
     if(pdfExistente) {
         // Si ya existe, reemplazarlo
         await actualizar_archivo(
@@ -51,11 +53,17 @@ async function GenerarCartaConstanciaSS(datosFormulario) {
             rutaPDF
         );
 
+        // Obtener los metadatos actualizados
+        resultadoDrive = await obtener_archivo(
+            pdfExistente.id
+        );
+
         console.log("PDF actualizado en Google Drive:", nombrePDF);
+
     } else {
-        // Si no existe, subirlo
-        await subir_archivo(
-            nombrePDF,
+        // Subir PDF nuevo
+        resultadoDrive = await subir_archivo(
+            nombrePDF, 
             rutaPDF,
             datos.Drive_Folder_Id
         );
@@ -63,9 +71,12 @@ async function GenerarCartaConstanciaSS(datosFormulario) {
         console.log("PDF nuevo subido a Google Drive:", nombrePDF);
     }
 
+    // Devolver datos del PDF y su ubicación
     return{
-        docx: rutaDocumento,
-        pdf: rutaPDF
+        pdf: rutaPDF,
+        documentoPDF: resultadoDrive.name,
+        Drive_File_Id: resultadoDrive.mimeType,
+        Tamano: resultadoDrive.size
     };
 }
 

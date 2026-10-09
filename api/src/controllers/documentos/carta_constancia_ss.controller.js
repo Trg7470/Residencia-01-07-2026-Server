@@ -10,15 +10,17 @@ async function GenerarConstanciaSSController(req, res) {
         const datos = req.body;
         console.log("Datos recibidos:", datos);
 
-        // Generar document9os usando los datos del formulario
+        // Generar documentos usando los datos del formulario
         const documentos = await GenerarCartaConstanciaSS(datos);
         res.status(200).json({
             mensaje: "Constancia de Servicio Social generada correctamente.",
-            documentoWord: path.basename(documentos.docx),
-            documentoPDF: path.basename(documentos.pdf)
+            documentoPDF: documentos.documentoPDF,
+            Drive_File_Id: documentos.Drive_File_Id,
+            MimeType: documentos.MimeType,
+            Tamano: documentos.Tamano
         });
     } catch(error){
-        console.error(error);
+        console.error("Error al generar la constancia:", error);
         res.status(500).json({
             mensaje: "Error al generar la Constancia de Servicio Social."
         });
