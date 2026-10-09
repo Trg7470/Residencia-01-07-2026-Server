@@ -203,27 +203,44 @@ async function crear_ruta_expediente(datos) {
         datos.anio,
         GOOGLE_ROOT_FOLDER_ID
     );
-    const tipo = await obtener_o_crear_carpeta(
-        datos.tipo,
+
+    const mes = await obtener_o_crear_carpeta(
+        datos.mes,
         anio.id
     );
+
+    const tipo = await obtener_o_crear_carpeta(
+        datos.tipo,
+        mes.id
+    );
+
     const escuela = await obtener_o_crear_carpeta(
         datos.escuela,
         tipo.id
     );
+
     const carrera = await obtener_o_crear_carpeta(
         datos.carrera,
         escuela.id
     );
+
     const adscripcion = await obtener_o_crear_carpeta(
         datos.adscripcion,
         carrera.id
     );
+
     const expediente = await obtener_o_crear_carpeta(
         datos.expediente,
         adscripcion.id
     );
+
     return {
+        anio,
+        mes,
+        tipo,
+        escuela,
+        carrera,
+        adscripcion,
         expediente
     };
 }
