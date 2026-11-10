@@ -15,6 +15,7 @@ const AdscripcionesRoutes = require('./adscripciones.routes');
 const ContactosEmergenciaRoutes = require('./contactos_emergencia.routes');
 const DocumentosRoutes = require('./documentos.routes');
 const ExpedientesRoutes = require('./expedientes.routes');
+const RegistroPrestadorRoutes = require('./registro_prestador.routes');
 
 //Documentos
 const FichaIdentificacionRoutes = require("./documentos/ficha_identificacion.routes");
@@ -25,7 +26,7 @@ const IncidenciasBecariosRoutes = require("./documentos/incidencias_becarios.rou
 const VacacionesBecariosRoutes = require("./documentos/vacaciones_becarios.routes");
 const GafeteRoutes = require("./documentos/gafete.routes");
 
-
+router.use('/prestadores', RegistroPrestadorRoutes);
 router.use('/contactos_emergencia', ContactosEmergenciaRoutes);
 router.use('/beneficiarios', BeneficiariosRoutes);
 router.use('/datos_personales',DatosPersonalesRoutes);

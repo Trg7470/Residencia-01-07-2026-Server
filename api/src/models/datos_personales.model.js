@@ -1,7 +1,7 @@
 const { mysqlPool } = require('../config/mysql');
 
 class DatosPersonales {
-    static async guardar_datos(data) {
+    static async guardar_datos(data, connection = mysqlPool) {
         const {
             Nombre,
             Apellido_Paterno,
@@ -21,7 +21,7 @@ class DatosPersonales {
             Estado_Civil,
             Fecha_Registro
         } = data;
-        const [result] = await mysqlPool.query(
+        const [result] = await connection.query(
             `INSERT INTO Datos_Personales(Nombre,
             Apellido_Paterno,
             Apellido_Materno,

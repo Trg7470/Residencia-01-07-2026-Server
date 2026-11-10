@@ -2,7 +2,7 @@ const { mysqlPool } = require('../config/mysql');
 
 class Beneficiarios
 {
-    static async guardar(data)
+    static async guardar(data, connection = mysqlPool)
     {
         const {
             Nombre,
@@ -10,7 +10,7 @@ class Beneficiarios
             Parentesco,
             Id_Persona_Beneficiario
         } = data;
-        const [result] = await mysqlPool.query(
+        const [result] = await connection.query(
             `INSERT INTO Beneficiarios(Nombre, Edad, Parentesco, Id_Persona_Beneficiario) VALUES
         (?,?,?,?)`,
         [Nombre, Edad, Parentesco, Id_Persona_Beneficiario]
