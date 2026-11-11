@@ -171,7 +171,7 @@ CREATE TABLE `datos_escolares` (
   `Id_Carrera_D_Escolar` int NOT NULL,
   `Id_Persona_D_Escolar` int NOT NULL,
   `Id_Escuela_D_Escolar` int NOT NULL,
-  PRIMARY KEY (`Id_Dato_Escoalr`),
+  PRIMARY KEY (`Id_Dato_Escolar`),
   UNIQUE KEY `Id_Persona_D_Escolar` (`Id_Persona_D_Escolar`),
   KEY `Fk_Id_Escuela_idx` (`Id_Escuela_D_Escolar`),
   CONSTRAINT `FK_Id_Carrera` FOREIGN KEY (`Id_Persona_D_Escolar`) REFERENCES `carreras` (`Id_Carrera`) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -476,8 +476,12 @@ ON DELETE RESTRICT
 ON UPDATE CASCADE;
 
 
-
-
-
-
-
+ALTER TABLE adscripciones
+ADD COLUMN CIFRHS TINYINT(1) NOT NULL DEFAULT 0,
+ADD COLUMN Tipo_Plaza ENUM(
+    'A',
+    'B',
+    'C',
+    'Trabajador',
+    'Enfermera'
+) DEFAULT NULL;
