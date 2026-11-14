@@ -2,9 +2,13 @@
 
 -- MySQL 8.x / 9.x
 
+
+DROP DATABASE IF EXISTS `SIEES`;
+
 CREATE DATABASE IF NOT EXISTS `SIEES` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 USE `SIEES`;
+
 
 -- Tabla: carpetas_drive
 
@@ -174,10 +178,11 @@ CREATE TABLE `datos_escolares` (
   PRIMARY KEY (`Id_Dato_Escolar`),
   UNIQUE KEY `Id_Persona_D_Escolar` (`Id_Persona_D_Escolar`),
   KEY `Fk_Id_Escuela_idx` (`Id_Escuela_D_Escolar`),
-  CONSTRAINT `FK_Id_Carrera` FOREIGN KEY (`Id_Persona_D_Escolar`) REFERENCES `carreras` (`Id_Carrera`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `FK_Id_Carrera` FOREIGN KEY (`Id_Carrera_D_Escolar`) REFERENCES `carreras` (`Id_Carrera`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `Fk_Id_Escuela` FOREIGN KEY (`Id_Escuela_D_Escolar`) REFERENCES `escuelas` (`Id_Escuela`),
   CONSTRAINT `FK_Id_Persona` FOREIGN KEY (`Id_Persona_D_Escolar`) REFERENCES `datos_personales` (`Id_Persona`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 -- Tabla: usuarios
@@ -200,7 +205,7 @@ CREATE TABLE `usuarios` (
 
 
 -- Tabla: bitacora
-DROP TABLE IF EXISTS `bitacora`;
+
 CREATE TABLE `bitacora` (
     `Id_Bitacora` INT NOT NULL AUTO_INCREMENT,
     `Accion` VARCHAR(100) NOT NULL,
@@ -222,9 +227,7 @@ CREATE TABLE `bitacora` (
         REFERENCES `usuarios` (`Id_Usuario`)
         ON DELETE RESTRICT
         ON UPDATE CASCADE
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Tabla: documentos
@@ -239,7 +242,6 @@ CREATE TABLE `documentos` (
   `Subido_Por_Usuario` int NOT NULL,
   `Id_Carpeta_Documento` int NOT NULL,
   `Id_Tipo_Doc_D` int NOT NULL,
-  `Tipo` varchar(100) NOT NULL,
   PRIMARY KEY (`Id_Documento`),
   UNIQUE KEY `Drive_File_Id` (`Drive_File_Id`),
   KEY `FK_Id_Usuario` (`Subido_Por_Usuario`),
@@ -285,7 +287,7 @@ INSERT INTO `roles` VALUES (1,'Administrador','Tiene acceso completo al sistema.
 
 -- Datos de: tipos_documento
 
-INSERT INTO `tipos_documento` VALUES (1,'ADSCRIPCION','Adscripción','Documentos relacionados con la asignación del prestador a una unidad de salud, cambios de adscripción y oficios correspondientes.'),(2,'SERVICIO_SOCIAL','Servicio Social','Documentos relacionados con el proceso de servicio social del prestador.'),(3,'FICHA_IDENTIFICACION','Ficha de Identificación','Ficha que contiene la información personal, escolar, de adscripción y de contacto del prestador.'),(4,'INCIDENCIAS_BECARIOS','Incidencias Becarios','Documentos que registran incidencias administrativas, disciplinarias o de asistencia del becario.'),(5,'VACACIONES_BECARIOS','Vacaciones Becarios','Solicitudes, autorizaciones y documentos relacionados con los periodos vacacionales del becario.'),(6,'LIBERACION','Liberación','Documentos que acreditan la conclusión y liberación de la residencia, internado, prácticas o servicio social.'),(7,'COMISION','Comisión','Documentos que autorizan al prestador a realizar actividades fuera de su unidad de adscripción.'),(8,'CARTA_PRESENTACION','Carta de Presentación','Documento emitido por la institución educativa para presentar oficialmente al alumno ante la unidad receptora.'),(9,'CARTA_ACEPTACION','Carta de Aceptación','Documento emitido por la unidad receptora mediante el cual acepta al prestador.'),(10,'CARTA_TERMINO','Carta de Término','Documento que acredita la conclusión satisfactoria del periodo de formación.'),(11,'CURP','CURP','Copia de la Clave Única de Registro de Población del prestador.'),(12,'RFC','RFC','Constancia de inscripción al Registro Federal de Contribuyentes.'),(13,'ACTA_NACIMIENTO','Acta de Nacimiento','Documento oficial que acredita la identidad y fecha de nacimiento del prestador.'),(14,'IDENTIFICACION_OFICIAL','Identificación Oficial','Documento oficial vigente con fotografía para acreditar la identidad del prestador.'),(15,'COMPROBANTE_DOMICILIO','Comprobante de Domicilio','Documento que acredita el domicilio actual del prestador.'),(16,'CONSTANCIA_ESTUDIOS','Constancia de Estudios','Documento expedido por la institución educativa que acredita la situación académica del alumno.'),(17,'HISTORIAL_ACADEMICO','Historial Académico','Documento oficial que contiene las materias cursadas, calificaciones y promedio.'),(18,'CERTIFICADO_ESTUDIOS','Certificado de Estudios','Documento que acredita la conclusión parcial o total de un programa académico.'),(19,'TITULO_PROFESIONAL','Título Profesional','Documento que acredita la obtención del grado profesional correspondiente.'),(20,'CEDULA_PROFESIONAL','Cédula Profesional','Documento oficial que autoriza el ejercicio profesional.'),(21,'SEGURO_FACULTATIVO','Seguro Facultativo','Documento que acredita la afiliación al seguro facultativo o cobertura médica.'),(22,'VIGENCIA_DERECHOS','Constancia de Vigencia de Derechos','Documento emitido por la institución de seguridad social que acredita la vigencia de los derechos del prestador.'),(23,'CARTA_COMPROMISO','Carta Compromiso','Documento mediante el cual el prestador acepta cumplir las normas y obligaciones institucionales.'),(24,'CARTA_CONFIDENCIALIDAD','Carta de Confidencialidad','Documento mediante el cual el prestador se compromete a proteger la información confidencial de la institución.'),(25,'CURRICULUM_VITAE','Currículum Vitae','Resumen de la formación académica, experiencia y competencias del prestador.'),(26,'FOTOGRAFIA','Fotografía','Fotografía reciente del prestador para identificación en el expediente.'),(27,'CONSTANCIA_VACUNACION','Constancia de Vacunación','Documento que acredita el cumplimiento del esquema de vacunación requerido.'),(28,'EXAMEN_MEDICO','Examen Médico','Documento que certifica el estado de salud y la aptitud del prestador para realizar sus actividades.'),(29,'OFICIO','Oficio','Documento administrativo utilizado para comunicaciones oficiales relacionadas con el expediente.'),(30,'CONSTANCIA','Constancia','Documento que certifica un hecho, actividad o situación específica del prestador.'),(31,'OTRO','Otro','Documento que no corresponde a ninguna de las categorías anteriores.');
+INSERT INTO `tipos_documento` VALUES (1,'ADSCRIPCION','Adscripción','Documentos relacionados con la asignación del prestador a una unidad de salud, cambios de adscripción y oficios correspondientes.'),(2,'SERVICIO_SOCIAL','Servicio Social','Documentos relacionados con el proceso de servicio social del prestador.'),(3,'FICHA_IDENTIFICACION','Ficha de Identificación','Ficha que contiene la información personal, escolar, de adscripción y de contacto del prestador.'),(4,'INCIDENCIAS_BECARIOS','Incidencias Becarios','Documentos que registran incidencias administrativas, disciplinarias o de asistencia del becario.'),(5,'VACACIONES_BECARIOS','Vacaciones Becarios','Solicitudes, autorizaciones y documentos relacionados con los periodos vacacionales del becario.'),(6,'LIBERACION','Liberación','Documentos que acreditan la conclusión y liberación de la residencia, internado, prácticas o servicio social.'),(7,'COMISION','Comisión','Documentos que autorizan al prestador a realizar actividades fuera de su unidad de adscripción.'),(8,'CARTA_PRESENTACION','Carta de Presentación','Documento emitido por la institución educativa para presentar oficialmente al alumno ante la unidad receptora.'),(9,'CARTA_ACEPTACION','Carta de Aceptación','Documento emitido por la unidad receptora mediante el cual acepta al prestador.'),(10,'CARTA_TERMINO','Carta de Término','Documento que acredita la conclusión satisfactoria del periodo de formación.'),(11,'CURP','CURP','Copia de la Clave Única de Registro de Población del prestador.'),(12,'RFC','RFC','Constancia de inscripción al Registro Federal de Contribuyentes.'),(13,'ACTA_NACIMIENTO','Acta de Nacimiento','Documento oficial que acredita la identidad y fecha de nacimiento del prestador.'),(14,'IDENTIFICACION_OFICIAL','Identificación Oficial','Documento oficial vigente con fotografía para acreditar la identidad del prestador.'),(15,'COMPROBANTE_DOMICILIO','Comprobante de Domicilio','Documento que acredita el domicilio actual del prestador.'),(16,'CONSTANCIA_ESTUDIOS','Constancia de Estudios','Documento expedido por la institución educativa que acredita la situación académica del alumno.'),(17,'HISTORIAL_ACADEMICO','Historial Académico','Documento oficial que contiene las materias cursadas, calificaciones y promedio.'),(18,'CERTIFICADO_ESTUDIOS','Certificado de Estudios','Documento que acredita la conclusión parcial o total de un programa académico.'),(19,'TITULO_PROFESIONAL','Título Profesional','Documento que acredita la obtención del grado profesional correspondiente.'),(20,'CEDULA_PROFESIONAL','Cédula Profesional','Documento oficial que autoriza el ejercicio profesional.'),(21,'SEGURO_FACULTATIVO','Seguro Facultativo','Documento que acredita la afiliación al seguro facultativo o cobertura médica.'),(22,'VIGENCIA_DERECHOS','Constancia de Vigencia de Derechos','Documento emitido por la institución de seguridad social que acredita la vigencia de los derechos del prestador.'),(23,'CARTA_COMPROMISO','Carta Compromiso','Documento mediante el cual el prestador acepta cumplir las normas y obligaciones institucionales.'),(24,'CARTA_CONFIDENCIALIDAD','Carta de Confidencialidad','Documento mediante el cual el prestador se compromete a proteger la información confidencial de la institución.'),(25,'CURRICULUM_VITAE','Currículum Vitae','Resumen de la formación académica, experiencia y competencias del prestador.'),(26,'FOTOGRAFIA','Fotografía','Fotografía reciente del prestador para identificación en el expediente.'),(27,'CONSTANCIA_VACUNACION','Constancia de Vacunación','Documento que acredita el cumplimiento del esquema de vacunación requerido.'),(28,'EXAMEN_MEDICO','Examen Médico','Documento que certifica el estado de salud y la aptitud del prestador para realizar sus actividades.'),(29,'OFICIO','Oficio','Documento administrativo utilizado para comunicaciones oficiales relacionadas con el expediente.'),(30,'CONSTANCIA','Constancia','Documento que certifica un hecho, actividad o situación específica del prestador.'),(31,'CARTA_PASANTE','Carta de Pasante','Documento expedido por la institución educativa que acredita que el alumno ha concluido los estudios correspondientes y se encuentra en trámite de titulación.'),(32,'HOJA_DESIGNACION_SIASS','Hoja de Designación SIASS','Documento emitido mediante el Sistema de Información para la Administración del Servicio Social (SIASS), que acredita la designación del prestador en una unidad receptora.'),(33,'ACTA_NACIMIENTO_BENEFICIARIO','Acta de Nacimiento de Beneficiario','Documento que acredita la identidad y fecha de nacimiento de cada beneficiario registrado en el expediente.'),(34,'CURP_BENEFICIARIO','CURP de Beneficiario','Documento que contiene la Clave Única de Registro de Población de cada beneficiario registrado.'),(35,'FOTOGRAFIA_BENEFICIARIO','Fotografía de Beneficiario','Fotografía de identificación de cada beneficiario registrado en el expediente.'),(36,'GAFETE','Gafete','Documento de identificación institucional del prestador que contiene sus datos personales, adscripción y vigencia.'),(37,'OTRO','Otro','Documento que no corresponde a ninguna de las categorías anteriores.');
 
 
 
@@ -303,14 +305,13 @@ INSERT INTO `unidades` VALUES (1,1,'GÓMEZ PALACIO','DGSSA000710','RUBÉN JARAMI
 
 -- Datos de: adscripciones
 
-INSERT INTO `adscripciones` VALUES (34,'2026-06-01','2026-11-01',89,8,1,'Principal');
-
+INSERT INTO `adscripciones` VALUES (73,'2026-07-01','2026-12-01',89,8,1,'Principal');
 
 
 -- Datos de: beneficiarios
 
-INSERT INTO `beneficiarios` VALUES (34,'Araceli Flores',49,'Madre',89);
 
+INSERT INTO `beneficiarios` VALUES (34,'Araceli Flores',49,'Madre',89);
 
 
 -- Datos de: contactos_emergencia
@@ -321,15 +322,15 @@ INSERT INTO `contactos_emergencia` VALUES (22,'Araceli Flores','Madre','87142969
 
 INSERT INTO `datos_escolares` VALUES (22,9.50,1,'53220450695',8,89,4);
 
+
+
 -- Datos de: usuarios
 
 INSERT INTO `usuarios` VALUES (1,'Isaac','Castro','Gomez','222310291@itslerdo.edu.mx','$2b$10$Z0AO8IXG6LxLXaxld0EyteO62y/PEeBmMzzaRYqNPRaMnUAESC1Bq','2026-07-08 12:18:20',1,1),(2,'Ileana Sarai','Hurtado','Flores','222310202@itslerdo.edu.mx','$2b$10$Z0AO8IXG6LxLXaxld0EyteO62y/PEeBmMzzaRYqNPRaMnUAESC1Bq','2026-07-08 12:18:20',1,2),(3,'Maria Monserrath','Rodriguez','Rivera','222310352@itslerdo.edu.mx','$2b$10$Z0AO8IXG6LxLXaxld0EyteO62y/PEeBmMzzaRYqNPRaMnUAESC1Bq','2026-07-08 12:18:20',1,1),(4,'Victoria Fernanda','Torres','Hernandez','222310166@itslerdo.edu.mx','$2b$10$Z0AO8IXG6LxLXaxld0EyteO62y/PEeBmMzzaRYqNPRaMnUAESC1Bq','2026-07-08 12:18:20',1,2);
 
 -- Datos de: documentos
 
-INSERT INTO `documentos` VALUES (9,'Ficha_Identificacion_Hurtado_Flores.pdf','1wrk29I1prSUCosKanZi3U2mdJXFUfcH1','application/pdf',150261,'2026-09-03 18:25:53',2,60,3,'Ficha Identificacion'),(10,'Carta_Adscripcion_Hurtado_Flores.pdf','1vOZ5aQcMAN7Xa-Hzh3uxKQ1hikyQ3x7A','application/pdf',204032,'2026-09-03 19:03:55',2,60,3,'Carta Adscripcion');
-
-
+INSERT INTO `documentos` VALUES (9,'Ficha_Identificacion_Hurtado_Flores.pdf','1wrk29I1prSUCosKanZi3U2mdJXFUfcH1','application/pdf',150261,'2026-09-03 18:25:53',2,60,3),(10,'Carta_Adscripcion_Hurtado_Flores.pdf','1vOZ5aQcMAN7Xa-Hzh3uxKQ1hikyQ3x7A','application/pdf',204032,'2026-09-03 19:03:55',2,60,3);
 
 
 CREATE OR REPLACE VIEW vw_expedientes AS
@@ -359,7 +360,6 @@ INNER JOIN Carreras c
 INNER JOIN Escuelas e
     ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
 
-USE SIEES;
 
 CREATE OR REPLACE VIEW vw_informacion_general_expediente AS
 SELECT
@@ -407,15 +407,8 @@ INNER JOIN Carreras c
     ON c.Id_Carrera = de.Id_Carrera_D_Escolar
 INNER JOIN Escuelas e
     ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
-    
-ALTER TABLE Documentos
-ADD COLUMN Tipo VARCHAR(100) NOT NULL;
 
--- =====================================================
--- TABLA: incidencias_becarios
--- =====================================================
-DROP TABLE IF EXISTS `incidencias_becarios`;
-
+/* TABLA DE INCIDENCIAS BECARIOS */
 CREATE TABLE `incidencias_becarios` (
     `Id_Incidencia` INT NOT NULL AUTO_INCREMENT,
     `Fecha_Actual` DATE NOT NULL,
@@ -423,65 +416,66 @@ CREATE TABLE `incidencias_becarios` (
     `Promocion` VARCHAR(50) NOT NULL,
     `Motivo` TEXT NOT NULL,
     `Id_Persona_Incidencia` INT NOT NULL,
-
     PRIMARY KEY (`Id_Incidencia`),
-
     KEY `IDX_Id_Persona_Incidencia`
         (`Id_Persona_Incidencia`),
-
     CONSTRAINT `FK_Id_Persona_Incidencia`
         FOREIGN KEY (`Id_Persona_Incidencia`)
         REFERENCES `datos_personales` (`Id_Persona`)
         ON DELETE CASCADE
         ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE cartas_presentacion (
-    Id_Carta INT AUTO_INCREMENT PRIMARY KEY,
+/* TABLA DE CARTA DE PRESENTACIÓN */
+CREATE TABLE carta_presentacion (
+	Id_Carta INT NOT NULL AUTO_INCREMENT,
     Id_Documento INT NOT NULL,
     Id_Adscripcion INT NOT NULL,
     Fecha_Carta DATE NOT NULL,
-    Abreviatura_Destinatario VARCHAR(20),
-    Dirigido_A VARCHAR(150),
-    Ocupacion_Destinatario VARCHAR(150),
-    Abreviatura_Alumno VARCHAR(20),
-    Ocupacion_Encargado VARCHAR(150),
-    Abreviatura_Encargado VARCHAR(20),
-    Encargado VARCHAR(150),
-    Fecha_Registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_carta_documento FOREIGN KEY (Id_Documento) REFERENCES documentos(Id_Documento)
-        ON DELETE CASCADE
+    Abreviatura_Destinatario VARCHAR(20) NOT NULL,
+    Dirigido_A VARCHAR(255) NOT NULL,
+    Ocupacion_Destinatario VARCHAR(255) NOT NULL,
+    Abreviatura_Alumno VARCHAR(20) NOT NULL,
+    Ocupacion_Encargado VARCHAR(255) NOT NULL,
+    Abreviatura_Encargado VARCHAR(20) NOT NULL,
+    Encargado VARCHAR(255) NOT NULL,
+    Fecha_Registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(Id_Carta),
+    UNIQUE KEY UK_Carta_Documento(Id_Documento),
+    UNIQUE KEY UK_Carta_Adscripcion(Id_Adscripcion),
+    CONSTRAINT FK_Carta_Documento
+		FOREIGN KEY(Id_Documento)
+        REFERENCES documentos (Id_Documento)
+        ON DELETE RESTRICT
         ON UPDATE CASCADE,
-
-    CONSTRAINT fk_carta_adscripcion FOREIGN KEY (Id_Adscripcion) REFERENCES adscripciones(Id_Adscripcion)
+	CONSTRAINT FK_Carta_Adscripcion
+		FOREIGN KEY(Id_Adscripcion)
+        REFERENCES adscripciones(Id_Adscripcion)
         ON DELETE RESTRICT
         ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/* TABLA DE VACACIONES */
+CREATE TABLE Vacaciones_Becarios (
+	Id_Vacaciones INT AUTO_INCREMENT PRIMARY KEY,
+    Id_Carpeta INT NOT NULL,
+    Id_Documento INT NOT NULL,
+    Periodo TINYINT NOT NULL,
+    Cantidad_Dias TINYINT NOT NULL,
+    Periodo_De DATE NOT NULL,
+    Periodo_A DATE NOT NULL,
+    Fecha_Regreso DATE NOT NULL,
+    Fecha_Solicitud DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FK_Vacaciones_Carpeta
+		FOREIGN KEY (Id_Carpeta)
+        REFERENCES carpetas_drive (Id_Carpeta),
+	CONSTRAINT FK_Vacaciones_Documento
+		FOREIGN KEY (Id_Documento)
+        REFERENCES documentos (Id_Documento),
+	CONSTRAINT CHK_Vacaciones_Periodo
+		CHECK (Periodo IN(1,2)),
+	CONSTRAINT CHK_Vacaciones_Dias
+		CHECK (Cantidad_Dias BETWEEN 1 AND 10),
+	INDEX IDX_Vacaciones_Carpeta_Periodo
+		(Id_Carpeta, Periodo)
 );
-
-
-
-ALTER TABLE documentos
-ADD COLUMN Id_Adscripcion_Documento INT NULL;
-
-ALTER TABLE documentos
-ADD CONSTRAINT FK_Documentos_Adscripcion
-FOREIGN KEY (Id_Adscripcion_Documento)
-REFERENCES adscripciones(Id_Adscripcion)
-ON DELETE RESTRICT
-ON UPDATE CASCADE;
-
-
-ALTER TABLE adscripciones
-ADD COLUMN CIFRHS TINYINT(1) NOT NULL DEFAULT 0,
-ADD COLUMN Tipo_Plaza ENUM(
-    'A',
-    'B',
-    'C',
-    'Trabajador',
-    'Enfermera'
-) DEFAULT NULL;
