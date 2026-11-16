@@ -118,7 +118,6 @@ CREATE TABLE `unidades` (
 
 
 -- Tabla: adscripciones
-
 CREATE TABLE `adscripciones` (
   `Id_Adscripcion` int NOT NULL AUTO_INCREMENT,
   `Fecha_Inicio` date NOT NULL,
@@ -127,14 +126,18 @@ CREATE TABLE `adscripciones` (
   `Id_Unidad_Adscripcion` int NOT NULL,
   `Id_Tipo_Personal_Ad` int NOT NULL,
   `Tipo_Adscripcion` enum('Principal','Comision') NOT NULL,
+  `CIFRHS` tinyint(1) NOT NULL DEFAULT 0,
+  `Tipo_Plaza` enum('A','B','C','Trabajador','Enfermera') DEFAULT NULL,
   PRIMARY KEY (`Id_Adscripcion`),
   KEY `FK_Id_Persona_Adscripcion` (`Id_Persona_Adscripcion`),
   KEY `FK_Id_Unidad_Adscripcion` (`Id_Unidad_Adscripcion`),
   KEY `FK_Id_Tipo_Personal_Ad` (`Id_Tipo_Personal_Ad`),
   CONSTRAINT `FK_Id_Persona_Adscripcion` FOREIGN KEY (`Id_Persona_Adscripcion`) REFERENCES `datos_personales` (`Id_Persona`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Id_Tipo_Personal_Ad` FOREIGN KEY (`Id_Tipo_Personal_Ad`) REFERENCES `tipos_personal` (`Id_Tipo_Personal`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `FK_Id_Unidad_Adscripcion` FOREIGN KEY (`Id_Unidad_Adscripcion`) REFERENCES `unidades` (`Id_Unidad`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `FK_Id_Unidad_Adscripcion` FOREIGN KEY (`Id_Unidad_Adscripcion`)REFERENCES `unidades` (`Id_Unidad`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Tabla: beneficiarios
@@ -305,7 +308,7 @@ INSERT INTO `unidades` VALUES (1,1,'GÓMEZ PALACIO','DGSSA000710','RUBÉN JARAMI
 
 -- Datos de: adscripciones
 
-INSERT INTO `adscripciones` VALUES (73,'2026-07-01','2026-12-01',89,8,1,'Principal');
+INSERT INTO `adscripciones` VALUES (73,'2026-07-01','2026-12-01',89,8,1,'Principal',0,NULL);
 
 
 -- Datos de: beneficiarios
