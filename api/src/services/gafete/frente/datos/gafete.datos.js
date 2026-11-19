@@ -1,27 +1,29 @@
 const path = require("path");
 const RUTAS = require("../../../../config/rutas");
 
-function ObtenerDatosGafete(){
+function FormatearFecha(fecha) {
+    if (!fecha) return "";
 
-    return{
+    const fechaLocal = new Date(fecha);
 
-        Foto: path.join(RUTAS.fotos,"Foto_Prueba.jpeg"),
+    return fechaLocal.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC"
+    }).toUpperCase();
+}
 
-        Nombre:"E.P.S.S. ILEANA SARAI HURTADO FLORES",
-
-        Adscripcion:"PROMOCIÓN A LA SALUD JSN2",
-
-        Escuela:"ESC. ENFERMERÍA BENITO JUÁREZ,\nGÓMEZ PALACIO, DGO.",
-
-        Vigencia:"01 AGOSTO 2026 AL 31 JULIO 2027",
-
-        Carrera: "ENFERMERIA",
-
-        Encargado: "DR. ISRAEL GRADO MOLINA",
-
-        Ocupacion: "JEFE DE ENSEÑANZA"
-
+function ObtenerDatosGafete(expediente) {
+    return {
+        Foto: expediente.Fotografia || "",
+        Nombre: (expediente.Nombre_Completo || "").trim().toUpperCase(),
+        Adscripcion: (expediente.Adscripcion || "").trim().toUpperCase(),
+        Escuela: (expediente.Escuela || "").trim().toUpperCase(),
+        Vigencia: `${FormatearFecha(expediente.Fecha_Inicio)} AL ${FormatearFecha(expediente.Fecha_Termino)}`,
+        Encargado: (expediente.Nombre_Encargado || "").trim().toUpperCase(),
+        Ocupacion: (expediente.Cargo_Encargado || "").trim().toUpperCase()
     };
 }
 
-module.exports = {ObtenerDatosGafete};
+module.exports = { ObtenerDatosGafete };

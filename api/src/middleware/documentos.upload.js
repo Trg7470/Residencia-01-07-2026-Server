@@ -22,14 +22,39 @@ const almacenamiento = multer.diskStorage({
     }
 });
 
+
 const upload = multer({
     storage: almacenamiento,
     limits: {
         fileSize: 5 * 1024 * 1024
     },
     fileFilter: (req, file, cb) => {
-        if (file.mimetype !== 'application/pdf') {
-            return cb(new Error('Solamente se permiten archivos PDF.'));
+
+        // Identificar si se está subiendo la fotografía del pasante
+        const esFotografiaPasante =
+            req.body.Id_Tipo_Doc_D === "26" ||
+            req.body.Id_Tipo_Doc_D === 26;
+
+        if (esFotografiaPasante) {
+            const formatosImagen = [
+                "image/jpeg",
+                "image/png"
+            ];
+
+            if (!formatosImagen.includes(file.mimetype)) {
+                return cb(new Error(
+                    "La fotografía debe estar en formato JPG, JPEG o PNG."
+                ));
+            }
+
+            return cb(null, true);
+        }
+
+        // Los demás documentos solamente permiten PDF
+        if (file.mimetype !== "application/pdf") {
+            return cb(new Error(
+                "Solamente se permiten archivos PDF."
+            ));
         }
 
         cb(null, true);

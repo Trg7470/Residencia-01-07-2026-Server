@@ -4,5 +4,6 @@ const DatosEscolaresController = require('../controllers/datos_escolares.control
 const { verificarToken } = require('../middleware/auth.middleware');
 
 router.post('/guardar',DatosEscolaresController.save);
+router.get('/persona/:id', DatosEscolaresController.obtenerPorPersona);
 
 module.exports = router;

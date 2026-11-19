@@ -1,4 +1,3 @@
-
 const { mysqlPool } = require('../config/mysql');
 const Datos_Personales = require('../models/datos_personales.model');
 const Beneficiarios = require('../models/beneficiarios.model');
@@ -6,9 +5,18 @@ const Adscripciones = require('../models/adscripciones.model');
 const Carpetas_Drive = require('../models/carpetas_drive.model');
 const Datos_Escolares = require('../models/datos_escolares.model');
 const Contactos_Emergencia = require('../models/contactos_emergencia.model');
+const Documentos = require('../models/documentos.model');
 
 class Registro_Prestador_Service {
-    static async registrar(datos_personales_data, beneficiarios_data, adscripciones_data, carpeta_drive_data, datos_escolares_data, contactos_emergencia_data) {
+    static async registrar(
+        datos_personales_data, 
+        beneficiarios_data, 
+        adscripciones_data, 
+        carpeta_drive_data, 
+        datos_escolares_data, 
+        contactos_emergencia_data,
+        documento_data
+    ) {
         const connection = await mysqlPool.getConnection();
 
         try {
@@ -37,7 +45,7 @@ class Registro_Prestador_Service {
 
             const Id_Carpeta = await Carpetas_Drive.crear_carpeta({
                 ...carpeta_drive_data,
-                Id_Persona_Adscripcion: Id_Adscripcion
+                Id_Adscripcion: Id_Adscripcion
             }, connection);
 
             await Datos_Escolares.guardar({
@@ -57,6 +65,11 @@ class Registro_Prestador_Service {
                     Id_Persona_Contacto: Id_Persona
                 }, connection);
             }
+
+            await Documentos.crear({
+                ...documento_data,
+                Id_Carpeta_Documento: Id_Carpeta
+            }, connection);
 
             await connection.commit();
 

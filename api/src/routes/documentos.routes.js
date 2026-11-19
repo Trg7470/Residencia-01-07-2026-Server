@@ -4,9 +4,12 @@ const DocumentosController = require('../controllers/documentos.controller');
 
 // Petición POST usada por el frontend (http://localhost:3000/api/documentos/registrar)
 router.post('/registrar', DocumentosController.registrar);
+router.put('/actualizar', DocumentosController.actualizar);
 
 // Consultas y operaciones adicionales
 router.get('/count', DocumentosController.contar);
+router.get('/formatos_pendientes', DocumentosController.contarFormatosPendientes);
+router.get('/adscripcion/:id', DocumentosController.probarAdscripcion);
 router.get('/:id', DocumentosController.obtenerPorId);
 router.get('/carpeta/:idCarpeta', DocumentosController.obtenerPorCarpeta);
 router.delete('/:id', DocumentosController.eliminar);

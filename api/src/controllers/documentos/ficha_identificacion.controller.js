@@ -1,5 +1,5 @@
 const path = require("path");
-const { GenerarFicha } = require("../../services/documentos/ficha_identificacion.service");
+const { GenerarFicha, LimpiarFicha } = require("../../services/documentos/ficha_identificacion.service");
 
 async function GenerarFichaController(req, res) {
     try {
@@ -33,4 +33,22 @@ async function GenerarFichaController(req, res) {
     }
 }
 
-module.exports = { GenerarFichaController };
+async function LimpiarFichaController(req, res) {
+    try {
+        const { archivoWordTemporal, archivoPDFTemporal } = req.body;
+
+        await LimpiarFicha(archivoWordTemporal, archivoPDFTemporal);
+
+        res.status(200).json({
+            mensaje: "Archivos temporales eliminados correctamente."
+        });
+    } catch (error) {
+        console.error("Error al limpiar archivos temporales:", error);
+        res.status(500).json({
+            mensaje: "Error al eliminar archivos temporales.",
+            error: error.message
+        });
+    }
+}
+
+module.exports = { GenerarFichaController, LimpiarFichaController };

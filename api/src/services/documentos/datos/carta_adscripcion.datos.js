@@ -1,19 +1,19 @@
-
-function ObtenerDatosAdscripcion (){
-    return{
-        Fecha_Inicio: "01 de agosto de 2025",
-        Nombre_Pasante: "GALARZA RODRIGUEZ GRECIA ALESSANDRA",
-        Tipo_Personal: "MEDICO PASANTE",
-        Tipo_Participacion: "SERVICIO SOCIAL",
-        Facultad: "FACULTAD DE CIENCIAS DE LA SALUD",
-        Universidad: "UNIVERSIDAD JUAREZ DEL ESTADO DE DURANGO",
-        Lugar_Adscripcion:"C.S.R. CD. JUAREZ DGO.",
-        Tipo_Plaza:"A",
-        Fecha_Termino:"31 de julio del 2026",
-        Hora_Entrada: "08:00",
-        Hora_Salida: "2:30",
-        Encargado: "JOSÉ ANTONIO ADAME DE LEÓN"
+function ObtenerDatosCartaAdscripcion(datosFormulario) {
+    return {
+        Fecha_Inicio: datosFormulario.Fecha_Inicio,
+        Nombre_Pasante: (datosFormulario.Nombre_Pasante || "").trim().toUpperCase(),
+        Tipo_Personal: (datosFormulario.Tipo_Personal || "").trim().toUpperCase(),
+        Tipo_Participacion: (datosFormulario.Tipo_Participacion || "").trim().toUpperCase(),
+        Facultad: (datosFormulario.Facultad || "").trim().toUpperCase(),
+        Universidad: (datosFormulario.Universidad || "").trim().toUpperCase(),
+        Escuela: (datosFormulario.Escuela || "").trim().toUpperCase(),
+        Lugar_Adscripcion: (datosFormulario.Lugar_Adscripcion || "").trim().toUpperCase(),
+        Tipo_Plaza: (datosFormulario.Tipo_Plaza || "").trim().toUpperCase(),
+        Fecha_Termino: datosFormulario.Fecha_Termino,
+        Hora_Entrada: datosFormulario.Hora_Entrada,
+        Hora_Salida: datosFormulario.Hora_Salida,
+        Encargado: (datosFormulario.Encargado || "").trim().toUpperCase()
     };
 }
 
-module.exports = {ObtenerDatosAdscripcion};
+module.exports = { ObtenerDatosCartaAdscripcion };

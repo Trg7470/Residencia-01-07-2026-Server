@@ -3,10 +3,9 @@ const path = require("path");
 const RUTAS = require("../../../config/rutas");
 const { ObtenerDatosQR } = require("./qr/datos/qr.datos");
 const { GenerarQR } = require("./qr/generarQR.service");
-
 const { ImagenBase64 } = require("../imagen.service");
 
-async function GenerarHTMLAtras() {
+async function GenerarHTMLAtras(datosExpediente) {
 
     // Leer plantilla
     const rutaHTML = path.join(
@@ -39,7 +38,11 @@ async function GenerarHTMLAtras() {
     );
 
     // Obtener datos
-    const datos = ObtenerDatosQR();
+    const datos = ObtenerDatosQR(datosExpediente);
+
+    // Datos que se mostraran debajo de la firma del alumno
+    datos.TipoPersonal = datosExpediente.Tipo_Personal || "";
+    datos.Carrera = datosExpediente.Carrera || "";
 
     // Banner
     datos.Banner = ImagenBase64(
@@ -66,16 +69,6 @@ async function GenerarHTMLAtras() {
     });
 
     return html;
-
-    Object.keys(datos).forEach((campo)=>{
-
-    html = html.replaceAll(
-        `{{${campo}}}`,
-        datos[campo]
-    );
-
-});
-
 }
 
 module.exports = {

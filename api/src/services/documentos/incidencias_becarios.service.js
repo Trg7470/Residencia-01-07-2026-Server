@@ -1,73 +1,128 @@
+const fs = require("fs").promises;
+const path = require("path");
+const RUTAS = require("../../config/rutas");
 const { ObtenerPlantilla } = require("./encontrarPlantilla.service");
+const { ObtenerDatosIncidenciasBecarios } = require("./datos/incidencias_becarios.datos");
 const { GenerarDocumento } = require("./generarDocumento.service");
 const { GenerarPDF } = require("./generarPDF.service");
-const {ObtenerIdPersonaPorCarpeta,CrearIncidenciaBecario} = require("../../models/incidencias_becarios.model.js");
-const { subir_archivo } = require("../drive.service");
-async function GenerarIncidenciasBecarios(data) {
-    try {
-        console.log("GENERANDO INCIDENCIA PARA BECARIO");
-        console.log("Datos recibidos:", data);
-        // 1. OBTENER ID DE PERSONA
-        const Id_Persona_Incidencia =await ObtenerIdPersonaPorCarpeta(data.Id_Carpeta);
-        console.log("Id_Persona encontrado:",Id_Persona_Incidencia);
-        // 2. GUARDAR INCIDENCIA EN MYSQL
-        const incidencia =
-            await CrearIncidenciaBecario({
-                Fecha_Actual:data.Fecha_Actual,
-                Fecha_Solicitada:data.Fecha_Solicitada,
-                Promocion:data.Promocion,
-                Motivo:data.Motivo,
-                Id_Persona_Incidencia:Id_Persona_Incidencia
-            });
-        console.log("Incidencia guardada en MySQL:",incidencia.Id_Incidencia);
-        // 3. OBTENER PLANTILLA
-        const plantilla =ObtenerPlantilla("Formato_Incidencias_Becarios");
-        // 4. CREAR NOMBRE DEL ARCHIVO
-        const nombreCompleto =(data.Nombre_Becario || "").trim();
-        const partesNombre =nombreCompleto.split(/\s+/);
-        let apellidoPat = "";
-        let apellidoMat = "";
-        if (partesNombre.length >= 2) {
-            apellidoMat =partesNombre[partesNombre.length - 2];
-            apellidoPat =partesNombre[partesNombre.length - 1];
-        }
-        const fecha = new Date();
-        const anio =fecha.getFullYear();
-        const mes =String(fecha.getMonth() + 1).padStart(2, "0");
-        const dia =String(fecha.getDate()).padStart(2, "0");
-        const nombreArchivo =`Incidencias_Becarios_${apellidoPat}_${apellidoMat}_${anio}-${mes}-${dia}`;
-        // 5. GENERAR WORD
-        const rutaDocumento =await GenerarDocumento(plantilla,data,nombreArchivo);
-        console.log("Word generado:",rutaDocumento);
-        // 6. GENERAR PDF
-        const rutaPDF =await GenerarPDF(rutaDocumento,nombreArchivo);
-        console.log("PDF generado:",rutaPDF);
-        // 7. VALIDAR CARPETA DRIVE
-        if (!data.Drive_Folder_Id) {
-            throw new Error(
-                "No se recibió el Drive_Folder_Id del expediente."
-            );
-        }
-        // 8. SUBIR ÚNICAMENTE EL PDF
-        const archivoPDFDrive =
-            await subir_archivo(
-                `${nombreArchivo}.pdf`,
-                rutaPDF,
-                data.Drive_Folder_Id
-            );
-        console.log("PDF subido correctamente a Google Drive.");
-        // 9. DEVOLVER RESULTADO
-        return {
-            Id_Incidencia:incidencia.Id_Incidencia,
-            docx:rutaDocumento,
-            pdf:rutaPDF,
-            driveFolderId:data.Drive_Folder_Id,
-            drivePDF:archivoPDFDrive
-        };
-    } catch (error) {
-        console.error("ERROR GENERANDO INCIDENCIA DE BECARIOS");
-        console.error(error);
-        throw error;
+const { subir_archivo, listar_archivos_carpeta, actualizar_archivo, obtener_archivo } = require("../../services/drive.service");
+
+async function GenerarIncidenciasBecarios(datosFormulario) {
+    // Obtener plantilla
+    const plantilla = ObtenerPlantilla("Formato_Incidencias_Becarios");
+
+    // Obtener datos
+    const datos = ObtenerDatosIncidenciasBecarios(datosFormulario);
+
+    // Nombre del archivo con los apellidos
+    const apellidoPaterno = (datosFormulario.Apellido_Paterno || "").trim().replace(/\s+/g, "_");
+    const apellidoMaterno = (datosFormulario.Apellido_Materno || "").trim().replace(/\s+/g, "_");
+    const nombreArchivo = `Incidencias_Becarios_${apellidoPaterno}_${apellidoMaterno}`;
+
+    // Generar Word y PDF
+    const rutaDocumento = await GenerarDocumento(
+        plantilla,
+        datos,
+        nombreArchivo
+    );
+
+    const rutaPDF = await GenerarPDF(
+        rutaDocumento,
+        nombreArchivo
+    );
+
+    // Validar carpeta de Google Drive
+    if (!datosFormulario.Drive_Folder_Id) {
+        throw new Error("No se recibió la carpeta de Google Drive del expediente.");
     }
+
+    // Buscar si el PDF ya existe en la carpeta
+    const nombrePDF = `${nombreArchivo}.pdf`;
+
+    const archivos = await listar_archivos_carpeta(
+        datosFormulario.Drive_Folder_Id
+    );
+
+    const pdfExistente = archivos.find(
+        archivo => archivo.name === nombrePDF
+    );
+
+    let resultadoDrive;
+
+    if (pdfExistente) {
+        // Actualizar PDF
+        await actualizar_archivo(pdfExistente.id, rutaPDF);
+        resultadoDrive = await obtener_archivo(pdfExistente.id);
+    } else {
+        // Subir PDF nuevo
+        resultadoDrive = await subir_archivo(
+            nombrePDF,
+            rutaPDF,
+            datosFormulario.Drive_Folder_Id
+        );
+    }
+
+    // Devolver datos del PDF y nombres de los archivos temporales
+    return {
+        docx: rutaDocumento,
+        pdf: rutaPDF,
+        documentoWord: path.basename(rutaDocumento),
+        documentoPDF: resultadoDrive.name,
+        archivoWordTemporal: path.basename(rutaDocumento),
+        archivoPDFTemporal: path.basename(rutaPDF),
+        Drive_File_Id: resultadoDrive.id,
+        MimeType: resultadoDrive.mimeType,
+        Tamano: resultadoDrive.size,
+        drivePDF: resultadoDrive
+    };
 }
-module.exports = {GenerarIncidenciasBecarios};
+
+// ELIMINAR ARCHIVOS TEMPORALES DE INCIDENCIAS
+async function EliminarTemporalesIncidencias(datos) {
+    const { archivoWordTemporal, archivoPDFTemporal } = datos;
+
+    // Validar que sean únicamente nombres de archivo
+    if (
+        typeof archivoWordTemporal !== "string" ||
+        path.basename(archivoWordTemporal) !== archivoWordTemporal ||
+        path.extname(archivoWordTemporal).toLowerCase() !== ".docx"
+    ) {
+        throw new Error("El nombre del documento Word temporal no es válido.");
+    }
+
+    if (
+        typeof archivoPDFTemporal !== "string" ||
+        path.basename(archivoPDFTemporal) !== archivoPDFTemporal ||
+        path.extname(archivoPDFTemporal).toLowerCase() !== ".pdf"
+    ) {
+        throw new Error("El nombre del documento PDF temporal no es válido.");
+    }
+
+    // Construir rutas dentro de las carpetas temporales
+    const rutaWord = path.join(
+        RUTAS.temporalesDocx,
+        archivoWordTemporal
+    );
+
+    const rutaPDF = path.join(
+        RUTAS.temporalesPdf,
+        archivoPDFTemporal
+    );
+
+    // Eliminar unicamente los dos archivos indicados
+    for (const ruta of [rutaWord, rutaPDF]) {
+        try {
+            await fs.unlink(ruta);
+        } catch (error) {
+            if (error.code !== "ENOENT") {
+                throw error;
+            }
+        }
+    }
+
+    return {
+        mensaje: "Los archivos temporales se eliminaron correctamente."
+    };
+}
+
+module.exports = { GenerarIncidenciasBecarios, EliminarTemporalesIncidencias };

@@ -42,17 +42,22 @@ async function ObtenerDatosConstanciaSS(datosFormulario) {
 
     return {
         // Datos existentes del expediente
-        Alumno: expediente.Nombre_Completo,
+        Alumno: expediente.Nombre_Completo.toUpperCase(),
         Apellido_Paterno: expediente.Apellido_Paterno,
         Apellido_Materno: expediente.Apellido_Materno,
         Drive_Folder_Id: expediente.Drive_Folder_Id,
-        
         Abreviatura_Alumno: datosFormulario.Abreviatura_Alumno,
         Universidad: expediente.Escuela,
         Fecha_Inicio: FormatearFecha(expediente.Fecha_Inicio),
         Fecha_Termino: FormatearFecha(expediente.Fecha_Termino),
         Unidad: unidad.Nombre,
-        Municipio: unidad.Municipio,
+        Municipio: unidad.Municipio
+         ? unidad.Municipio
+            .toLowerCase()
+            .split(" ")
+            .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+            .join(" ")
+         : "",
         Estado: "Dgo",
 
         // Fecha de la constancia

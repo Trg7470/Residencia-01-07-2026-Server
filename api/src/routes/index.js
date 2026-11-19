@@ -21,10 +21,12 @@ const RegistroPrestadorRoutes = require('./registro_prestador.routes');
 const FichaIdentificacionRoutes = require("./documentos/ficha_identificacion.routes");
 const CartaAdscripcionRoutes = require("./documentos/carta_adscripcion.routes");
 const CartaConstanciaSSRoutes = require("./documentos/carta_constancia_ss.routes");
-const CartaPresentacionRoutes = require("./documentos/carta_presentacion.routes");
+const CartaComisionRoutes = require("./documentos/carta_comision.routes");
 const IncidenciasBecariosRoutes = require("./documentos/incidencias_becarios.routes");
 const VacacionesBecariosRoutes = require("./documentos/vacaciones_becarios.routes");
 const GafeteRoutes = require("./documentos/gafete.routes");
+const CartaCompromisoRoutes = require("./documentos/carta_compromiso.routes");
+const CartaConfidencialidadRoutes = require("./documentos/carta_confidencialidad.routes");
 
 router.use('/prestadores', RegistroPrestadorRoutes);
 router.use('/contactos_emergencia', ContactosEmergenciaRoutes);
@@ -47,11 +49,11 @@ router.use('/documentos/',DocumentosRoutes);
 router.use('/documentos/ficha', FichaIdentificacionRoutes);
 router.use('/documentos/carta_adscripcion', CartaAdscripcionRoutes);
 router.use('/documentos/carta_constancia_ss', CartaConstanciaSSRoutes);
-router.use('/documentos/carta_presentacion', CartaPresentacionRoutes);
+router.use('/documentos/carta_comision', CartaComisionRoutes);
 router.use('/documentos/incidencias_becarios', IncidenciasBecariosRoutes);
 router.use('/documentos/vacaciones_becarios', VacacionesBecariosRoutes);
 router.use('/documentos/gafete', GafeteRoutes);
-
-
+router.use('/documentos/carta_compromiso', CartaCompromisoRoutes);
+router.use('/documentos/carta_confidencialidad', CartaConfidencialidadRoutes);
 
 module.exports = router;

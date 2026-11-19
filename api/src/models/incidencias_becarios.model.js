@@ -1,27 +1,22 @@
 const { mysqlPool } = require("../config/mysql.js");
 
-
-// ============================================================
 // OBTENER ID_PERSONA A PARTIR DE LA CARPETA
-// ============================================================
-async function ObtenerIdPersonaPorCarpeta(Id_Carpeta) {
-
+async function ObtenerIdPersonaPorCarpeta(
+    Id_Carpeta,
+    connection = mysqlPool
+) {
     const query = `
         SELECT dp.Id_Persona
         FROM carpetas_drive cd
-
         INNER JOIN adscripciones a
             ON cd.Id_Adscripcion = a.Id_Adscripcion
-
         INNER JOIN datos_personales dp
             ON a.Id_Persona_Adscripcion = dp.Id_Persona
-
         WHERE cd.Id_Carpeta = ?
-
         LIMIT 1
     `;
 
-    const [resultado] = await mysqlPool.execute(
+    const [resultado] = await connection.execute(
         query,
         [Id_Carpeta]
     );
@@ -35,11 +30,15 @@ async function ObtenerIdPersonaPorCarpeta(Id_Carpeta) {
     return resultado[0].Id_Persona;
 }
 
-
-// ============================================================
 // GUARDAR INCIDENCIA
-// ============================================================
-async function CrearIncidenciaBecario(datos) {
+async function CrearIncidenciaBecario(
+    datos,
+    connection = mysqlPool
+) {
+    const Id_Persona = await ObtenerIdPersonaPorCarpeta(
+        datos.Id_Carpeta,
+        connection
+    );
 
     const query = `
         INSERT INTO incidencias_becarios (
@@ -57,13 +56,17 @@ async function CrearIncidenciaBecario(datos) {
         datos.Fecha_Solicitada,
         datos.Promocion,
         datos.Motivo,
-        datos.Id_Persona_Incidencia
+        Id_Persona
     ];
 
-    const [resultado] = await mysqlPool.execute(query,valores);
+    const [resultado] = await connection.execute(
+        query,
+        valores
+    );
 
     return {
         Id_Incidencia: resultado.insertId
     };
 }
-module.exports = {ObtenerIdPersonaPorCarpeta,CrearIncidenciaBecario};
+
+module.exports = { ObtenerIdPersonaPorCarpeta, CrearIncidenciaBecario };

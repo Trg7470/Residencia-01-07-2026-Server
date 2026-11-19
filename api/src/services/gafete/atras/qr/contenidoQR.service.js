@@ -1,12 +1,11 @@
 function ObtenerContenidoQR(datos){
     return `
-══════════════════════════════════════
+══════════════════════════════
 SERVICIOS DE SALUD DE DURANGO
 JURISDICCIÓN SANITARIA No. 2
 GAFETE DE IDENTIFICACIÓN OFICIAL
-══════════════════════════════════════
-ID GAFETE:
-${datos.IdGafete}
+══════════════════════════════
+
 NOMBRE:
 ${datos.Nombre}
 ADSCRIPCIÓN:
@@ -25,12 +24,14 @@ DERECHOHABIENCIA:
 ${datos.Derechohabiencia}
 AFILIACIÓN:
 ${datos.Afiliacion}
-══════════════════════════════════════
+══════════════════════════════
+
 Este código contiene información del titular
 para fines de identificación y atención
 en caso de emergencia.
 El uso no autorizado de esta información
 está prohibido.
+
 Reportes:
 Jefatura de Enseñanza
 Jurisdicción Sanitaria No. 2

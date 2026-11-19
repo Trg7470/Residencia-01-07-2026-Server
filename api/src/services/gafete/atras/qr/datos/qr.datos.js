@@ -1,17 +1,26 @@
-function ObtenerDatosQR(){
+function FormatearFecha(fecha) {
+    if (!fecha) return "";
 
-    return{
-        IdGafete: "PENDIENTE",
-        Nombre: "LOPEZ MARTINEZ FATIMA MARIEL",
-        Adscripcion: "C.S. EL COMPAS, DGO.",
-        Escuela: "ESC. ENFERMERIA BENITO JUAREZ S.C. GOMEZ PALACIO, DGO.",
-        Vigencia: "01/08/2026 - 31/07/2027",
-        GrupoSanguineo: "O RH POSITIVO",
-        Contacto: "ESTELA MARTINEZ SALAZAR",
-        Telefono: "8713469365",
-        Derechohabiencia: "NO",
-        Afiliacion: "NO APLICA"
+    return new Date(fecha).toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        timeZone: "UTC"
+    });
+}
+
+function ObtenerDatosQR(expediente) {
+    return {
+        Nombre: expediente.Nombre_Completo || "",
+        Adscripcion: expediente.Adscripcion || "",
+        Escuela: expediente.Escuela || "",
+        Vigencia: `${FormatearFecha(expediente.Fecha_Inicio)} - ${FormatearFecha(expediente.Fecha_Termino)}`,
+        GrupoSanguineo: expediente.grupo_sanguineo || "",
+        Contacto: expediente.Nombre_Contacto || "",
+        Telefono: expediente.Telefono_Contacto || "",
+        Derechohabiencia: expediente.Derechohabiencia || "",
+        Afiliacion: expediente.Afiliacion || expediente.Numero_Afiliacion || ""
     };
 }
 
-module.exports = {ObtenerDatosQR};
+module.exports = { ObtenerDatosQR };

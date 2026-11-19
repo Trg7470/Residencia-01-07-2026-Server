@@ -67,7 +67,7 @@ async function subir_archivo(nombre, rutaArchivo, carpetaPadre) {
         media: {
             body: fs.createReadStream(rutaArchivo)
         },
-        fields: "id,name,mimeType, size"
+        fields: "id,name,mimeType,size"
     });
     return respuesta.data;
 }
@@ -76,10 +76,27 @@ async function subir_archivo(nombre, rutaArchivo, carpetaPadre) {
 // ELIMINAR ARCHIVO
 // ================================
 async function eliminar_archivo(idArchivo) {
-    await drive.files.delete({
-        fileId: idArchivo
-    });
-    return true;
+    try {
+        await drive.files.delete({
+            fileId: idArchivo
+        });
+
+        return true;
+
+    } catch (error) {
+
+        // Si el archivo ya no existe, consideramos
+        // que la eliminación está cumplida.
+        if (error.response?.status === 404 || error.code === 404) {
+            console.warn(
+                `El archivo ${idArchivo} ya no existe en Google Drive.`
+            );
+
+            return true;
+        }
+
+        throw error;
+    }
 }
 
 // ================================

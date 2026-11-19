@@ -1,4 +1,5 @@
 const Documentos = require('../models/documentos.model');
+const { EliminarCartaComision } = require('../services/documentos/carta_comision.service');
 
 class DocumentosController {
     // POST /api/documentos/registrar
@@ -70,16 +71,46 @@ class DocumentosController {
     static async eliminar(req, res) {
         try {
             const { id } = req.params;
+
+            // Obtener documento
+            const documento = await Documentos.obtenerPorId(id);
+
+            if (!documento) {
+                return res.status(404).json({
+                    error: 'Documento no encontrado.'
+                });
+            }
+
+            // Si es una comisión, utilizar su eliminación especializada
+            if (Number(documento.Id_Tipo_Doc_D) === 7) {
+
+                const resultado = await EliminarCartaComision(id);
+
+                return res.status(200).json({
+                    mensaje: 'Carta de comisión eliminada correctamente.',
+                    documento: resultado
+                });
+            }
+
+            // Para los demás documentos, conservar la eliminación actual
             const resultado = await Documentos.eliminar(id);
 
             if (resultado.affectedRows === 0) {
-                return res.status(404).json({ error: 'Documento no encontrado para eliminar.' });
+                return res.status(404).json({
+                    error: 'Documento no encontrado para eliminar.'
+                });
             }
 
-            return res.status(200).json({ mensaje: 'Documento eliminado correctamente.' });
+            return res.status(200).json({
+                mensaje: 'Documento eliminado correctamente.'
+            });
+
         } catch (error) {
             console.error('Error al eliminar documento:', error);
-            return res.status(500).json({ error: 'Error interno del servidor.' });
+
+            return res.status(400).json({
+                error: error.message || 'Error al eliminar el documento.'
+            });
         }
     }
 
@@ -92,6 +123,89 @@ class DocumentosController {
             return res.status(500).json({ error: 'Error interno del servidor.' });
         }
     }
-}
 
+    // GET /api/documentos/formatos-pendientes
+    static async contarFormatosPendientes(req, res) {
+        try {
+            const total = await Documentos.contarFormatosPendientes();
+
+            return res.status(200).json({ total });
+
+        } catch (error) {
+            console.error('Error al contar formatos pendientes:', error);
+
+            return res.status(500).json({
+                error: 'Error interno del servidor.'
+            });
+        }
+    }
+
+    static async probarAdscripcion(req, res) {
+        try {
+            const { id } = req.params;
+
+            const documento = await Documentos.obtenerConAdscripcion(id);
+
+            if (!documento) {
+                return res.status(404).json({
+                    error: 'Documento no encontrado.'
+                });
+            }
+
+            return res.status(200).json(documento);
+
+        } catch (error) {
+            console.error('Error al obtener documento con adscripción:', error);
+
+            return res.status(500).json({
+                error: 'Error interno del servidor.'
+            });
+        }
+    }
+    
+    static async actualizar(req, res) {
+        try {
+            const {
+                Id_Documento,
+                Nombre,
+                Drive_File_Id,
+                Subido_Por_Usuario,
+                Id_Carpeta_Documento,
+                Id_Tipo_Doc_D
+            } = req.body;
+
+            if (
+                !Id_Documento ||
+                !Nombre ||
+                !Drive_File_Id || 
+                !Subido_Por_Usuario ||
+                !Id_Carpeta_Documento ||
+                !Id_Tipo_Doc_D
+            ) {
+                return res.status(400).json({
+                    error: 'Faltan campos obligatorios para actualizar el documento.'
+                });
+            }
+
+            const resultado = await Documentos.actualizar(req.body);
+
+            if (resultado.affectedRows === 0) {
+                return res.status(404).json({
+                    error: 'No se encontró el documento para actualizar.'
+                });
+            }
+
+            return res.status(200).json({
+                mensaje: 'Documento actualizado exitosamente.'
+            });
+        } catch (error) {
+            console.error('Error al actualizar documento:', error);
+
+            return res.status(500).json({
+                error: 'Error interno del servidor.'
+            });
+        }
+    }
+
+}
 module.exports = DocumentosController;
