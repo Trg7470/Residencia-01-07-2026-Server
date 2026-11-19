@@ -312,22 +312,33 @@ SELECT
     dp.CURP,
     dp.Telefono,
     u.Nombre AS Adscripcion,
+    (
+        SELECT uc.Nombre
+        FROM Adscripciones ac
+        INNER JOIN Unidades uc
+            ON uc.Id_Unidad = ac.Id_Unidad_Adscripcion
+        WHERE ac.Id_Persona_Adscripcion = dp.Id_Persona
+          AND ac.Tipo_Adscripcion = 'Comision'
+        ORDER BY
+            ac.Fecha_Inicio DESC,
+            ac.Id_Adscripcion DESC
+        LIMIT 1
+    ) AS Comision,
     c.Nombre AS Carrera,
     e.Nombre AS Escuela
-FROM Carpetas_Drive cd
-INNER JOIN Adscripciones a
+FROM carpetas_drive cd
+INNER JOIN adscripciones a
     ON a.Id_Adscripcion = cd.Id_Adscripcion
-INNER JOIN Datos_Personales dp
+INNER JOIN datos_personales dp
     ON dp.Id_Persona = a.Id_Persona_Adscripcion
-INNER JOIN Unidades u
+INNER JOIN unidades u
     ON u.Id_Unidad = a.Id_Unidad_Adscripcion
-INNER JOIN Datos_Escolares de
+INNER JOIN datos_escolares de
     ON de.Id_Persona_D_Escolar = dp.Id_Persona
-INNER JOIN Carreras c
+INNER JOIN carreras c
     ON c.Id_Carrera = de.Id_Carrera_D_Escolar
-INNER JOIN Escuelas e
+INNER JOIN escuelas e
     ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
-
 
 CREATE OR REPLACE VIEW vw_informacion_general_expediente AS
 SELECT
@@ -345,6 +356,9 @@ SELECT
     dp.Apellido_Materno,
     dp.CURP,
     dp.Telefono,
+    ce.Nombre AS Nombre_Contacto,
+    ce.Parentesco AS Parentesco,
+    ce.Telefono AS Telefono_Contacto,
     dp.Correo,
     dp.Fecha_Nac,
     u.Nombre AS Adscripcion,
@@ -352,6 +366,7 @@ SELECT
     uc.Nombre AS Comision,
     c.Nombre AS Carrera,
     e.Nombre AS Escuela,
+    de.Numero_Afiliacion AS Numero_Afiliacion,
     a.Fecha_Inicio,
     a.Fecha_Termino,
 	a.Tipo_Plaza AS Tipo_Plaza
@@ -375,7 +390,9 @@ INNER JOIN Datos_Escolares de
 INNER JOIN Carreras c
     ON c.Id_Carrera = de.Id_Carrera_D_Escolar
 INNER JOIN Escuelas e
-    ON e.Id_Escuela = de.Id_Escuela_D_Escolar;
+    ON e.Id_Escuela = de.Id_Escuela_D_Escolar
+LEFT JOIN contactos_emergencia ce
+	ON ce.Id_Persona_Contacto = dp.Id_Persona;
 
 /* TABLA DE INCIDENCIAS BECARIOS */
 CREATE TABLE `incidencias_becarios` (
