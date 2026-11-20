@@ -2,12 +2,40 @@ const { mysqlPool } = require('../config/mysql')
 
 class Adscripciones {
     static async guardar(data, connection = mysqlPool) {
-        const { Fecha_Inicio, Fecha_Termino, CIFRHS, Tipo_Plaza, Id_Persona_Adscripcion, Id_Unidad_Adscripcion, Id_Tipo_Personal_Ad } = data;
+        const {
+            Fecha_Inicio,
+            Fecha_Termino,
+            CIFRHS,
+            Tipo_Plaza,
+            Id_Persona_Adscripcion,
+            Id_Unidad_Adscripcion,
+            Id_Tipo_Personal_Ad,
+            Tipo_Adscripcion = 'Principal'
+        } = data;
+
         const [result] = await connection.query(
-            `INSERT INTO Adscripciones(Fecha_Inicio, Fecha_Termino, CIFRHS, Tipo_Plaza, Id_Persona_Adscripcion, Id_Unidad_Adscripcion, Id_Tipo_Personal_Ad)
-            VALUES(?,?,?,?,?,?,?)`,
-            [Fecha_Inicio, Fecha_Termino, CIFRHS, Tipo_Plaza, Id_Persona_Adscripcion, Id_Unidad_Adscripcion, Id_Tipo_Personal_Ad]
+            `INSERT INTO Adscripciones (
+                Fecha_Inicio,
+                Fecha_Termino,
+                CIFRHS,
+                Tipo_Plaza,
+                Id_Persona_Adscripcion,
+                Id_Unidad_Adscripcion,
+                Id_Tipo_Personal_Ad,
+                Tipo_Adscripcion
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                Fecha_Inicio,
+                Fecha_Termino,
+                CIFRHS,
+                Tipo_Plaza,
+                Id_Persona_Adscripcion,
+                Id_Unidad_Adscripcion,
+                Id_Tipo_Personal_Ad,
+                Tipo_Adscripcion
+            ]
         );
+
         return result;
     }
 

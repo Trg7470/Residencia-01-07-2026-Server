@@ -11,7 +11,8 @@ class Registro_Prestador_Service {
     static async registrar(
         datos_personales_data, 
         beneficiarios_data, 
-        adscripciones_data, 
+        adscripciones_data,
+        comisiones_data, 
         carpeta_drive_data, 
         datos_escolares_data, 
         contactos_emergencia_data,
@@ -42,6 +43,20 @@ class Registro_Prestador_Service {
             }, connection);
 
             const Id_Adscripcion = result_a.insertId;
+
+            // Registrar las comisiones de la persona.
+            for (const comision of (comisiones_data || [])) {
+                await Adscripciones.guardar({
+                    Fecha_Inicio: comision.Fecha_Inicio,
+                    Fecha_Termino: comision.Fecha_Termino,
+                    CIFRHS: adscripciones_data.CIFRHS,
+                    Tipo_Plaza: adscripciones_data.Tipo_Plaza,
+                    Id_Persona_Adscripcion: Id_Persona,
+                    Id_Unidad_Adscripcion: Number(comision.Id_Unidad_Adscripcion),
+                    Id_Tipo_Personal_Ad: Number(comision.Id_Tipo_Personal_Ad),
+                    Tipo_Adscripcion: 'Comision'
+                }, connection);
+            }
 
             const Id_Carpeta = await Carpetas_Drive.crear_carpeta({
                 ...carpeta_drive_data,
